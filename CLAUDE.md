@@ -40,7 +40,7 @@ This project is built doc-first, on purpose. Read in this order:
 
 1. `docs/prd.md` — what we are building and why (the MVP).
 2. `docs/adr/` — architectural decisions and their rationale (start at the README).
-3. `docs/tasks.md` — the work breakdown (when it exists).
+3. `docs/tasks.md` — the work breakdown (milestones M0–M7, traceable to PRD/ADRs).
 4. `docs/mindset.md` — teaching and product philosophy (the voice).
 5. `docs/authoring-guide.md` — how to write lessons and graded exercises.
 
