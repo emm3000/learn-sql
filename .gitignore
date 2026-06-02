@@ -17,3 +17,6 @@ dist/
 # Editor
 .idea/
 *.swp
+
+# Agent tooling (skill registry)
+.atl/
