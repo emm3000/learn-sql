@@ -59,7 +59,7 @@ Each exercise is a typed TypeScript object, validated by a Zod schema at build t
 
 ## "Lesson is done" checklist
 
-A lesson is closed (mirrors `WORKFLOW.md`'s definition of a finished topic) when:
+A lesson is closed (mirrors `learning/WORKFLOW.md`'s definition of a finished topic) when:
 
 - [ ] Theory is written for a beginner.
 - [ ] Runnable examples execute cleanly against the seed.

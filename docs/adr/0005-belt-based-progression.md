@@ -14,7 +14,7 @@ strong sense of progress.
 
 Organize the whole journey into five **belts** — Beginner, Intermediate, Advanced,
 Ninja, Insane — that map directly onto the master roadmap phases
-(`ROADMAP_POSTGRES.md`). Each belt groups several lessons.
+(`learning/ROADMAP_POSTGRES.md`). Each belt groups several lessons.
 
 Gating between lessons is **soft**: a recommended order is shown and completion is
 tracked, but learners can navigate freely within an active belt. In the MVP, belts

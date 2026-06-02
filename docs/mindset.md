@@ -29,7 +29,7 @@ frustration shows up in the data — see PRD NG5.)
 
 ## 5. Always the real-world lens
 
-Every lesson answers more than syntax (this mirrors `WORKFLOW.md`'s required focus):
+Every lesson answers more than syntax (this mirrors `learning/WORKFLOW.md`'s required focus):
 
 - Is this used in real projects? When a lot, when not so much?
 - What does it cost in performance?

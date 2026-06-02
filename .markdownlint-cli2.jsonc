@@ -10,8 +10,9 @@
     "node_modules/**",
     "dist/**",
     ".astro/**",
+    // Spanish source content — authored in its own style, not linted.
+    "learning/**",
     "lessons/**",
-    "ROADMAP_POSTGRES.md",
-    "WORKFLOW.md"
+    "seed/**"
   ]
 }

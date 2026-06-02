@@ -102,7 +102,7 @@ Implications:
 
 The journey is organized into five belts. Each belt groups several lessons; each
 lesson contains theory, runnable examples, and auto-graded exercises. Belts map
-directly onto the master roadmap phases (see `ROADMAP_POSTGRES.md`).
+directly onto the master roadmap phases (see `learning/ROADMAP_POSTGRES.md`).
 
 ### 🟢 Belt 1 — Beginner — "Write SQL without fear"
 

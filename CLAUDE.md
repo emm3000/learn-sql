@@ -12,12 +12,12 @@ a PostgreSQL engine running in their browser. Full product spec: `docs/prd.md`.
 Two tracks live in this repo:
 
 - **The product being built** (English): the Astro app and its docs in `docs/`.
-- **The original learning content** (Spanish): `ROADMAP_POSTGRES.md`, `WORKFLOW.md`,
-  `lessons/`, `seed/`. Source material the app's lessons are based on.
+- **The original learning content** (Spanish): `learning/ROADMAP_POSTGRES.md`,
+  `learning/WORKFLOW.md`, `lessons/`, `seed/`. Source material the app's lessons are based on.
 
 IMPORTANT: Product code, UI strings, comments, commit messages and everything under
 `docs/` are in **English**. The original learning content (`lessons/`, `seed/`,
-`ROADMAP_POSTGRES.md`, `WORKFLOW.md`) is in **Spanish** — do NOT translate it unless
+`learning/ROADMAP_POSTGRES.md`, `learning/WORKFLOW.md`) is in **Spanish** — do NOT translate it unless
 migrating that content into the app.
 
 The Astro app is scaffolded (M0 done). It lives at the repo root: `package.json`,

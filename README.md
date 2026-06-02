@@ -47,8 +47,8 @@ docker compose down -v
 
 ## Ruta de estudio
 
-- [Roadmap maestro](./ROADMAP_POSTGRES.md)
-- [Workflow de aprendizaje](./WORKFLOW.md)
+- [Roadmap maestro](./learning/ROADMAP_POSTGRES.md)
+- [Workflow de aprendizaje](./learning/WORKFLOW.md)
 - [Leccion 01: SELECT](./lessons/01-select/README.md)
 - [Leccion 02: INSERT](./lessons/02-insert/README.md)
 - [Leccion 03: UPDATE y DELETE](./lessons/03-update-delete/README.md)
