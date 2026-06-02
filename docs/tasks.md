@@ -101,12 +101,12 @@ seed, shows results/errors, resets, and grades a hard-coded exercise.
 Goal: one Beginner lesson fully working end-to-end. This validates the entire
 architecture (PRD G4, G5) before we build anything else.
 
-- [ ] M4.1 ✍️ Author Lesson 01 prose: theory, runnable examples, real-world notes, summary
+- [x] M4.1 ✍️ Author Lesson 01 prose: theory, runnable examples, real-world notes, summary
       — `docs/authoring-guide.md`, `docs/mindset.md`
-- [ ] M4.2 ✍️ Author Lesson 01 exercises with `expectedSql` (result-based) — authoring-guide
-- [ ] M4.3 🔧 Lesson page (Astro) rendering prose + embedded playground + exercise list
-- [ ] M4.4 🔧 Per-lesson, per-exercise progress in `localStorage`; restore on return — FR-10
-- [ ] M4.5 ✍️🔧 Verify every exercise passes when graded against its own `expectedSql`
+- [x] M4.2 ✍️ Author Lesson 01 exercises with `expectedSql` (result-based) — authoring-guide
+- [x] M4.3 🔧 Lesson page (Astro) rendering prose + embedded playground + exercise list
+- [x] M4.4 🔧 Per-lesson, per-exercise progress in `localStorage`; restore on return — FR-10
+- [x] M4.5 ✍️🔧 Verify every exercise passes when graded against its own `expectedSql`
       (authoring checklist sanity check)
 
 Definition of done: a learner opens Lesson 01, reads, runs SQL, solves auto-graded
