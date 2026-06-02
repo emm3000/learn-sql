@@ -44,3 +44,9 @@ Si quieres borrar también los datos:
 ```bash
 docker compose down -v
 ```
+
+## Ruta de estudio
+
+- [Roadmap maestro](./ROADMAP_POSTGRES.md)
+- [Workflow de aprendizaje](./WORKFLOW.md)
+- [Leccion 01: SELECT](./lessons/01-select/README.md)
