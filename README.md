@@ -55,4 +55,5 @@ docker compose down -v
 - [Leccion 04: Filtros, DISTINCT y NULL](./lessons/04-filtros-distinct-null/README.md)
 - [Leccion 05: ORDER BY y LIMIT](./lessons/05-order-by-limit/README.md)
 - [Leccion 06: JOIN](./lessons/06-join/README.md)
+- [Leccion 07: GROUP BY y HAVING](./lessons/07-group-by-having/README.md)
 - [Seed clasico](./seed/README.md)
