@@ -133,12 +133,12 @@ path, and later belts read clearly as "coming soon".
 
 Goal: the remaining two MVP lessons, which also exercise state-based grading at scale.
 
-- [ ] M6.1 ✍️ Author Lesson 02 INSERT: prose + exercises (`gradeMode: state`,
+- [x] M6.1 ✍️ Author Lesson 02 INSERT: prose + exercises (`gradeMode: state`,
       with `verificationSql`) — authoring-guide
-- [ ] M6.2 ✍️ Author Lesson 03 UPDATE/DELETE: prose + exercises (state-based; emphasize the
+- [x] M6.2 ✍️ Author Lesson 03 UPDATE/DELETE: prose + exercises (state-based; emphasize the
       `WHERE` safety lesson) — authoring-guide
-- [ ] M6.3 🔧 Confirm state-based grading (M2.3) holds up across all authored exercises
-- [ ] M6.4 ✍️🔧 Run the authoring "done" checklist for lessons 02 and 03
+- [x] M6.3 🔧 Confirm state-based grading (M2.3) holds up across all authored exercises
+- [x] M6.4 ✍️🔧 Run the authoring "done" checklist for lessons 02 and 03
 
 Definition of done: all three Beginner lessons are complete, auto-graded, and pass their
 own reference solutions.
