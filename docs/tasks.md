@@ -154,7 +154,7 @@ Goal: ship it as a real public product. NFRs.
       — NFR-6
 - [ ] M7.3 Performance: confirm lazy-load and time-to-first-query target — NFR-3, NFR-4
 - [ ] M7.4 Responsive: readable on mobile; editor best-effort — NFR-10
-- [ ] M7.5 Unsupported-browser message (no WASM / no Web Worker) — NFR-9
+- [x] M7.5 Unsupported-browser message (no WASM / no Web Worker) — NFR-9
 - [ ] M7.6 Cookieless analytics for the success metrics — NFR-11
 - [ ] M7.7 Deploy to the chosen static host
 - [x] M7.8 End-to-end smoke test (Playwright): in a real browser, load Lesson 01, run a

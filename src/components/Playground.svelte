@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount, untrack } from 'svelte';
   import { DbClient } from '../lib/db/db-client.ts';
+  import { isPlaygroundSupported } from '../lib/db/browser-support.ts';
   import { gradeExercise } from '../lib/grading/grade.ts';
   import type { Exercise } from '../lib/exercise-schema.ts';
   import type { QueryResult, QueryError } from '../lib/db/types.ts';
@@ -20,6 +21,7 @@
   let db: DbClient | undefined = $state();
   let dbReady = $state(false);
   let dbError: string | undefined = $state();
+  let dbUnsupported = $state(false);
 
   // Seed the editor once from the exercise. We intentionally capture only the
   // initial value (untrack) — the editor content is learner-owned after mount.
@@ -43,6 +45,13 @@
 
   onMount(() => {
     let alive = true;
+
+    if (!isPlaygroundSupported()) {
+      dbUnsupported = true;
+      return () => {
+        alive = false;
+      };
+    }
 
     DbClient.create(seedSql)
       .then((client) => {
@@ -130,87 +139,97 @@
     <p>{exercise.prompt}</p>
   </div>
 
-  <!-- Loading / error state for the DB -->
-  {#if !dbReady && !dbError}
-    <div class="db-status loading" role="status" aria-live="polite">
-      Loading database&hellip;
+  <!-- Unsupported browser -->
+  {#if dbUnsupported}
+    <div class="db-status db-unsupported" role="alert">
+      This interactive SQL playground needs a modern browser with WebAssembly
+      and Web Worker support. Please switch to a recent version of Chrome, Edge,
+      Firefox, or Safari to run queries here.
     </div>
   {/if}
 
-  {#if dbError}
-    <div class="db-status db-error" role="alert">
-      Failed to start the database: {dbError}
-    </div>
-  {/if}
-
-  <!-- Editor -->
-  <div class="editor-wrapper">
-    <SqlEditor bind:value={sql} disabled={busy || !dbReady} />
-  </div>
-
-  <!-- Toolbar -->
-  <div class="toolbar">
-    <button
-      type="button"
-      onclick={runQuery}
-      disabled={busy || !dbReady}
-      class="btn btn-primary"
-    >
-      {queryRunning ? 'Running…' : 'Run'}
-    </button>
-    <button
-      type="button"
-      onclick={grade}
-      disabled={busy || !dbReady}
-      class="btn btn-grade"
-    >
-      {grading ? 'Grading…' : 'Grade'}
-    </button>
-    <button
-      type="button"
-      onclick={resetDb}
-      disabled={busy || !dbReady}
-      class="btn btn-reset"
-    >
-      {resetting ? 'Resetting…' : 'Reset DB'}
-    </button>
-  </div>
-
-  <!-- Reset confirmation -->
-  {#if resetMessage}
-    <div class="reset-message" role="status" aria-live="polite">
-      {resetMessage}
-    </div>
-  {/if}
-
-  <!-- Error panel -->
-  {#if queryError}
-    <div class="error-panel" role="alert">
-      <strong>Error:</strong> {queryError.message}
-      {#if queryError.detail}
-        <div class="error-detail">Detail: {queryError.detail}</div>
-      {/if}
-      {#if queryError.hint}
-        <div class="error-hint">Hint: {queryError.hint}</div>
-      {/if}
-    </div>
-  {/if}
-
-  <!-- Grade result -->
-  {#if gradeResult !== undefined}
-    {#if gradeResult.passed}
-      <div class="grade-pass" role="status" aria-live="polite">
-        Correct! Well done.
-      </div>
-    {:else}
-      <div class="grade-fail" role="alert">
-        <strong>Not quite.</strong> {gradeResult.message}
+  {#if !dbUnsupported}
+    <!-- Loading / error state for the DB -->
+    {#if !dbReady && !dbError}
+      <div class="db-status loading" role="status" aria-live="polite">
+        Loading database&hellip;
       </div>
     {/if}
-  {/if}
 
-  <!-- Query result table -->
-  {#if queryResult !== undefined}
+    {#if dbError}
+      <div class="db-status db-error" role="alert">
+        Failed to start the database: {dbError}
+      </div>
+    {/if}
+
+    <!-- Editor -->
+    <div class="editor-wrapper">
+      <SqlEditor bind:value={sql} disabled={busy || !dbReady} />
+    </div>
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+      <button
+        type="button"
+        onclick={runQuery}
+        disabled={busy || !dbReady}
+        class="btn btn-primary"
+      >
+        {queryRunning ? 'Running…' : 'Run'}
+      </button>
+      <button
+        type="button"
+        onclick={grade}
+        disabled={busy || !dbReady}
+        class="btn btn-grade"
+      >
+        {grading ? 'Grading…' : 'Grade'}
+      </button>
+      <button
+        type="button"
+        onclick={resetDb}
+        disabled={busy || !dbReady}
+        class="btn btn-reset"
+      >
+        {resetting ? 'Resetting…' : 'Reset DB'}
+      </button>
+    </div>
+
+    <!-- Reset confirmation -->
+    {#if resetMessage}
+      <div class="reset-message" role="status" aria-live="polite">
+        {resetMessage}
+      </div>
+    {/if}
+
+    <!-- Error panel -->
+    {#if queryError}
+      <div class="error-panel" role="alert">
+        <strong>Error:</strong> {queryError.message}
+        {#if queryError.detail}
+          <div class="error-detail">Detail: {queryError.detail}</div>
+        {/if}
+        {#if queryError.hint}
+          <div class="error-hint">Hint: {queryError.hint}</div>
+        {/if}
+      </div>
+    {/if}
+
+    <!-- Grade result -->
+    {#if gradeResult !== undefined}
+      {#if gradeResult.passed}
+        <div class="grade-pass" role="status" aria-live="polite">
+          Correct! Well done.
+        </div>
+      {:else}
+        <div class="grade-fail" role="alert">
+          <strong>Not quite.</strong> {gradeResult.message}
+        </div>
+      {/if}
+    {/if}
+
+    <!-- Query result table -->
+    {#if queryResult !== undefined}
     {@const { fields, rows, affectedRows } = queryResult}
     {#if fields.length === 0}
       <!-- Statement with no result set (INSERT/UPDATE/DELETE without RETURNING) -->
@@ -246,6 +265,7 @@
       </div>
     {/if}
   {/if}
+{/if}
 </div>
 
 <style>
@@ -287,6 +307,13 @@
     background: #fef2f2;
     color: #991b1b;
     border: 1px solid #fca5a5;
+  }
+
+  .db-status.db-unsupported {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fcd34d;
+    line-height: 1.55;
   }
 
   .editor-wrapper {
