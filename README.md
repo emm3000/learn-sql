@@ -57,4 +57,5 @@ docker compose down -v
 - [Leccion 06: JOIN](./lessons/06-join/README.md)
 - [Leccion 07: GROUP BY y HAVING](./lessons/07-group-by-having/README.md)
 - [Leccion 08: Subqueries y WITH](./lessons/08-subqueries-with/README.md)
+- [Leccion 09: Functions y Procedures](./lessons/09-functions-procedures/README.md)
 - [Seed clasico](./seed/README.md)
