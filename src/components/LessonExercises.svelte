@@ -178,8 +178,13 @@
 
   .chevron {
     flex-shrink: 0;
-    color: #9ca3af;
+    color: #6b7280;
     font-size: 11px;
+  }
+
+  .exercise-header:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: -2px;
   }
 
   .exercise-body {

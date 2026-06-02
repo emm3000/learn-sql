@@ -25,6 +25,7 @@
         basicSetup,
         sql({ dialect: PostgreSQL }),
         editableConf.of(EditorView.editable.of(!disabled)),
+        EditorView.contentAttributes.of({ 'aria-label': 'SQL editor' }),
         EditorView.updateListener.of((update) => {
           if (update.docChanged) {
             const newValue = update.state.doc.toString();

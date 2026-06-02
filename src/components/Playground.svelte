@@ -244,7 +244,7 @@
           <thead>
             <tr>
               {#each fields as field (field.name)}
-                <th>{field.name}</th>
+                <th scope="col">{field.name}</th>
               {/each}
             </tr>
           </thead>
@@ -351,12 +351,12 @@
   }
 
   .btn-grade {
-    background: #10b981;
+    background: #047857;
     color: #fff;
   }
 
   .btn-grade:not(:disabled):hover {
-    background: #059669;
+    background: #065f46;
   }
 
   .btn-reset {
@@ -449,7 +449,7 @@
   }
 
   .result-table td.null-cell {
-    color: #9ca3af;
+    color: #6b7280;
     font-style: italic;
   }
 
@@ -462,7 +462,7 @@
   .result-footer {
     padding: 4px 12px;
     font-size: 12px;
-    color: #9ca3af;
+    color: #6b7280;
     background: #f9fafb;
     border-top: 1px solid #e5e7eb;
   }

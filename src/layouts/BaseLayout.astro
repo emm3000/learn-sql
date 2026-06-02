@@ -48,6 +48,7 @@ if (canonical) {
     <slot name="head" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Skip to main content</a>
     <slot />
   </body>
 </html>
@@ -59,5 +60,27 @@ if (canonical) {
     padding: 24px;
     background: #f9fafb;
     color: #111827;
+  }
+
+  :focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    left: 8px;
+    top: -48px;
+    z-index: 100;
+    padding: 8px 12px;
+    background: #2563eb;
+    color: #fff;
+    border-radius: 0 0 6px 6px;
+    text-decoration: none;
+    transition: top 0.15s;
+  }
+
+  .skip-link:focus {
+    top: 0;
   }
 </style>
