@@ -72,11 +72,16 @@ significant decision means a new ADR — see `docs/adr/README.md` for the format
   Guard. Plan with the existing docs (`docs/prd.md`, `docs/adr/`, `docs/tasks.md`) and
   implement directly. Delegation rules still apply: delegate multi-file implementation
   and review diffs in fresh context before committing.
-- **Delegation models.** Writer/implementer sub-agents run on **Sonnet**.
-  Validator/reviewer sub-agents (auditing what a writer produced) run on **Opus 4.8**
-  — the strongest model judges the work. Always delegate in **fresh sub-agent contexts**
-  to keep the main orchestrator thread lean; the main thread coordinates and synthesizes,
-  it does not implement.
+- **Delegation models.** Three roles, three models, no inference:
+  - **Exploration/scouting** sub-agents (reading docs and mapping code to prepare a
+    plan) run on **Opus 4.8**.
+  - **Writer/implementer** sub-agents (writing the code) run on **Sonnet**.
+  - **Validator/reviewer** sub-agents (an aggressive fresh-context audit of what a
+    writer produced, before committing) run on **Opus 4.8** — the strongest model
+    judges the work.
+
+  Always delegate in **fresh sub-agent contexts** to keep the main orchestrator thread
+  lean; the main thread coordinates and synthesizes, it does not implement.
 
 ## Project state (context)
 
