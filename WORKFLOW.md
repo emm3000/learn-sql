@@ -37,3 +37,14 @@ Este repositorio esta pensado para avanzar en temas pequenos, claros y versionad
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
 
+## Enfoque de `dudas_y_aclaraciones`
+
+Esta seccion no debe quedarse en definiciones secas.
+Debe responder preguntas de mundo real como:
+
+- que pasa si la tabla ya tiene millones de filas
+- que riesgo existe si olvidas un `WHERE`
+- cuando conviene usar esta tecnica y cuando no
+- que errores aparecen en produccion
+- como se comporta con datos sucios o incompletos
+- que decision tomar si esto forma parte de una app real
