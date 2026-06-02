@@ -54,7 +54,10 @@ Goal: run real PostgreSQL in the browser, off the main thread, with a clean API.
 - [x] M1.3 Seed a lesson database from `classic_company.sql`
 - [x] M1.4 Reset: re-seed the lesson database to its initial state — FR-9
 - [x] M1.5 Lazy-load the WASM payload only on lesson pages, never on map/landing — NFR-3
-- [ ] M1.6 (Optional, deferred) Cache the seeded database in IndexedDB for fast repeat visits — NFR-5
+- [x] M1.6 Cache the seeded database in IndexedDB for fast repeat visits — NFR-5
+      (snapshot of the post-seed cluster via `dumpDataDir('gzip')`/`loadDataDir`, keyed by
+      `hashSeed(seedSql)`; repeat-visit boot ~495ms → ~108ms, measured. Falls back to the
+      seed path on any cache failure; grading/user mutations stay ephemeral.)
 
 Definition of done: from a test harness, init + seed + run a `SELECT` and a mutation, get
 correct results, and reset back to seed — all in a worker, with the UI thread free.

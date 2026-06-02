@@ -19,6 +19,7 @@
 
 import { PGlite } from '@electric-sql/pglite';
 import { worker } from '@electric-sql/pglite/worker';
+import type { PGliteWorkerOptions } from '@electric-sql/pglite/worker';
 
 // PGlite's bundled Emscripten glue probes Node globals (process.versions.node,
 // process.platform, process.argv) to detect its runtime. In a browser Web
@@ -32,7 +33,13 @@ const globalScope = globalThis as typeof globalThis & { process?: unknown };
 globalScope.process ??= { env: {}, platform: '', argv: [] };
 
 worker({
-  async init() {
+  async init(options: Exclude<PGliteWorkerOptions, 'extensions'>) {
+    // When a cached snapshot blob is supplied via `loadDataDir`, PGlite
+    // restores the data directory from that blob instead of running initdb.
+    // This saves ~390 ms on repeat visits (M1.6 / NFR-5).
+    if (options.loadDataDir) {
+      return new PGlite({ loadDataDir: options.loadDataDir });
+    }
     return new PGlite();
   },
 });

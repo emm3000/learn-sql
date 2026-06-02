@@ -18,6 +18,7 @@
 import { PGliteWorker } from '@electric-sql/pglite/worker';
 import type { RunSqlResult } from './types.ts';
 import { normalizeError } from './normalize-error.ts';
+import { hashSeed, getSnapshot, putSnapshot, deleteSnapshot } from './snapshot-cache.ts';
 
 export class DbClient {
   readonly #pg: PGliteWorker;
@@ -29,20 +30,71 @@ export class DbClient {
   }
 
   /**
-   * Spawn a new Worker, connect PGliteWorker, and run the initial seed.
+   * Spawn a new Worker, connect PGliteWorker, and seed the database.
+   *
+   * On a cache HIT the worker is initialised with `loadDataDir` — PGlite
+   * restores the post-seed cluster from a gzip blob instead of running
+   * initdb and executing the full seed SQL (~390 ms saved on repeat visits).
+   * If the restore fails (corrupt/partial blob), the consumed worker is
+   * terminated, the poisoned entry is evicted from IndexedDB, and the method
+   * falls through to the MISS path with a fresh worker — never bricks the
+   * playground on a bad cache entry.
+   *
+   * On a cache MISS the normal seed path runs, and the resulting cluster is
+   * captured with `dumpDataDir('gzip')` and written to IndexedDB for the
+   * next visit. The capture is best-effort: if it fails, the miss is silent
+   * and the next visit simply takes the slow path again.
    *
    * The `new URL('./worker.ts', import.meta.url)` expression is the
    * Vite/Rollup code-split boundary that ensures the PGlite WASM is
    * bundled into a separate chunk loaded only when this method is called.
    */
   static async create(seedSql: string): Promise<DbClient> {
+    const key = hashSeed(seedSql);
+    const cached = await getSnapshot(key);
+
+    if (cached !== null) {
+      // Cache HIT: restore the post-seed cluster directly. The worker's
+      // init() receives `loadDataDir` and passes it to `new PGlite(...)`,
+      // which skips initdb entirely. No seed SQL needed.
+      //
+      // If the blob is corrupt or the restore rejects for any reason, we
+      // evict the poisoned entry, terminate the consumed worker, and fall
+      // through to the MISS path below with a fresh worker.
+      const wHit = new Worker(new URL('./worker.ts', import.meta.url), {
+        type: 'module',
+      });
+      try {
+        // PGliteWorker.create awaits the worker's readiness handshake before
+        // resolving, so no additional waitReady call is needed (Q2).
+        const pg = await PGliteWorker.create(wHit, { loadDataDir: cached });
+        return new DbClient(pg, wHit);
+      } catch {
+        // Restore failed — terminate the consumed worker and evict the entry
+        // so future visits don't hit the same corrupt blob.
+        wHit.terminate();
+        await deleteSnapshot(key);
+        // Fall through to the MISS path with a new worker below.
+      }
+    }
+
+    // Cache MISS (or HIT fallback): boot normally, run the seed, then
+    // capture a snapshot for the next visit.
     const w = new Worker(new URL('./worker.ts', import.meta.url), {
       type: 'module',
     });
-    // PGliteWorker.create awaits the worker's readiness handshake before
-    // resolving, so no additional waitReady call is needed here (Q2).
     const pg = await PGliteWorker.create(w);
     await pg.exec(seedSql);
+
+    // Best-effort snapshot capture. Errors are swallowed so a dump failure
+    // never surfaces to the learner — the next visit will try again.
+    try {
+      const blob = await pg.dumpDataDir('gzip');
+      await putSnapshot(key, blob);
+    } catch {
+      // Intentionally silent — cache write failure is non-fatal.
+    }
+
     return new DbClient(pg, w);
   }
 
