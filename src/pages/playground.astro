@@ -1,5 +1,5 @@
 ---
-import Playground from '../components/Playground.svelte';
+import PlaygroundIsland from '../components/Playground.svelte';
 import { lesson01Exercises } from '../lib/exercises/lesson-01.ts';
 import seedSql from '../../seed/classic_company.sql?raw';
 
@@ -21,7 +21,7 @@ const exercise = lesson01Exercises[0];
       </p>
     </header>
     <main>
-      <Playground seedSql={seedSql} exercise={exercise} client:only="svelte" />
+      <PlaygroundIsland seedSql={seedSql} exercise={exercise} client:only="svelte" />
     </main>
   </body>
 </html>
