@@ -18,7 +18,7 @@
 ## Siguiente paso
 
 Cuando esto ya salga bien, pasamos a:
+
 - `VIEW`
 - `MATERIALIZED VIEW`
 - `TRIGGER`
-

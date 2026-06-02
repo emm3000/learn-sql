@@ -57,9 +57,9 @@ Each exercise is a typed TypeScript object, validated by a Zod schema at build t
   - Use a small epsilon (e.g. `0.001`) when floating-point rounding is possible.
   - `COUNT(*)`, `SUM`, plain `int`, and `bigint` come back as JS `number`, not string,
     so `null` is fine for pure integer results — but `0` is safe there too.
-  **Never set `numericTolerance` on columns holding numeric-looking string codes**
-  (zip codes, leading-zero IDs, phone numbers): tolerance coerces via `Number()`, so
-  `"007"` and `"7"` become equal, producing a false positive.
+    **Never set `numericTolerance` on columns holding numeric-looking string codes**
+    (zip codes, leading-zero IDs, phone numbers): tolerance coerces via `Number()`, so
+    `"007"` and `"7"` become equal, producing a false positive.
 
 ## Writing a good prompt
 

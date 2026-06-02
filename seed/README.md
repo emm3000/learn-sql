@@ -29,4 +29,3 @@ O dentro de `psql`:
 - Es un seed pensado para aprender, no para produccion.
 - Puedes correrlo varias veces para resetear el escenario.
 - Si luego quieres, lo podemos separar en varios seeds por tema.
-

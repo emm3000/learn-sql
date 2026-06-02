@@ -17,4 +17,3 @@ Sirve para ver inmediatamente que se guardo, sin hacer otra consulta aparte.
 **Puedo insertar varias filas a la vez**
 
 Si. Es una forma comun y eficiente de cargar datos.
-

@@ -45,4 +45,3 @@ HAVING COUNT(*) >= 2;
 ## Idea clave
 
 Si quieres responder preguntas como “cuantos”, “cuanto suma” o “cual grupo supera cierto limite”, esta es la herramienta base.
-

@@ -1,7 +1,7 @@
 # Mindset — Teaching & Product Principles
 
 The philosophy behind every lesson and product decision. When a choice is unclear,
-decide in favor of these principles. This is the *why* that keeps the product coherent
+decide in favor of these principles. This is the _why_ that keeps the product coherent
 as it grows.
 
 ## 1. If you did not write SQL, it did not count
@@ -24,7 +24,7 @@ returns what it returns. Syntax memorized without understanding is fragile and f
 
 There is no "reveal solution" in v1. Productive struggle is how instinct forms. But our
 learners are beginners: feedback must be specific and the path must be clear, so the
-struggle stays *productive*, never blind. (The door stays open to add hints if real
+struggle stays _productive_, never blind. (The door stays open to add hints if real
 frustration shows up in the data — see PRD NG5.)
 
 ## 5. Always the real-world lens
@@ -54,5 +54,5 @@ no "best practice" without context.
 
 - **Audience:** a beginner who already programs a little. Do not teach what a variable
   or a loop is; do teach every database concept from zero.
-- **Tone:** warm, direct, mentor energy. Explain the *why*. Never condescending.
+- **Tone:** warm, direct, mentor energy. Explain the _why_. Never condescending.
 - **Shape:** short and clear first; depth available on demand, not forced up front.

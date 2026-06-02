@@ -28,4 +28,3 @@ FROM saludos
 ORDER BY id DESC
 LIMIT 10;
 ```
-

@@ -30,4 +30,3 @@ Aprender a modificar y borrar datos con cuidado, usando filtros correctos para n
 - `casos_reales.md`
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
-

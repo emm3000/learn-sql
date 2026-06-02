@@ -26,4 +26,3 @@ LEFT JOIN departments d ON d.id = e.department_id;
 
 La condicion del `ON` define como se conectan las tablas.
 Si unes por la columna incorrecta, el resultado puede ser engañoso aunque la query no falle.
-

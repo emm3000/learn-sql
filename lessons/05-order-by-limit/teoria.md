@@ -48,4 +48,3 @@ LIMIT 5 OFFSET 10;
 
 Si no defines un orden, el resultado puede no ser estable.
 En una base real, ordenar antes de limitar es una practica importante, sobre todo en listas y paginacion.
-

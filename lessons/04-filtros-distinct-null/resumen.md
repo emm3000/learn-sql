@@ -18,7 +18,7 @@
 ## Siguiente paso
 
 Cuando esto ya salga bien, pasamos a:
+
 - `ORDER BY`
 - `LIMIT`
 - consultas mas completas de lectura
-

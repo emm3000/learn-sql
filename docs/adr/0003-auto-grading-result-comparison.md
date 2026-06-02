@@ -10,8 +10,8 @@ Exercises need instant, objective feedback. Because PGlite runs a real PostgreSQ
 the browser, we can execute both the learner's query and a reference solution and
 compare outcomes — no backend, no human, no guesswork.
 
-There are two fundamentally different kinds of exercise: those that *read* data and
-those that *change* it.
+There are two fundamentally different kinds of exercise: those that _read_ data and
+those that _change_ it.
 
 ## Decision
 

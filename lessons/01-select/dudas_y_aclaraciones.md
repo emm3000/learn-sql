@@ -18,4 +18,3 @@ Primero filtras las filas, luego ordenas el resultado final.
 **Por que `LIMIT` es util**
 
 Sirve para revisar datos sin traer toda la tabla.
-

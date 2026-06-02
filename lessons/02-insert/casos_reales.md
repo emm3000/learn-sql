@@ -30,4 +30,3 @@ INSERT INTO saludos (mensaje)
 VALUES ('Confirmar insercion')
 RETURNING *;
 ```
-

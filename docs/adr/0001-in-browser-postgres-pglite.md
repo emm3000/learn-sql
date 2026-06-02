@@ -6,8 +6,8 @@
 
 ## Context
 
-The product's core principle is hands-on: *if you did not write SQL, it did not
-count.* Learners must execute real SQL and see real results, ideally with zero setup
+The product's core principle is hands-on: _if you did not write SQL, it did not
+count._ Learners must execute real SQL and see real results, ideally with zero setup
 and no account.
 
 We need a place to run their queries. The options differ enormously in cost,

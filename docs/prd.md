@@ -41,8 +41,8 @@ On top of that, most resources are a flat pile of topics with no sense of journe
 the learner never knows how far they have come or what mastery looks like.
 
 The result: learners memorize syntax instead of building instinct, and quit before
-they feel competent. The guiding principle of this product is the opposite — *if you
-did not write SQL, it did not count* — wrapped in a path that makes progress visible.
+they feel competent. The guiding principle of this product is the opposite — _if you
+did not write SQL, it did not count_ — wrapped in a path that makes progress visible.
 
 ---
 
@@ -179,7 +179,7 @@ Each lesson renders:
   config. Auto-graded.
 - **Real-world notes** and **summary** (prose).
 
-> Content gap to resolve: exercise *solutions* do not exist yet in the repo. They must
+> Content gap to resolve: exercise _solutions_ do not exist yet in the repo. They must
 > be authored (in English) for these 3 lessons. This is content work, tracked
 > separately from engineering work.
 

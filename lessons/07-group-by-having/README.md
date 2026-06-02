@@ -39,4 +39,3 @@ docker compose exec -T db psql -U postgres -d aprendizaje < seed/classic_company
 - `casos_reales.md`
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
-

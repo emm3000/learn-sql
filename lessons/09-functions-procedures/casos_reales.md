@@ -23,4 +23,3 @@ Una procedure puede agrupar una operacion que cambia muchas filas, como un ajust
 ```sql
 CALL give_department_raise(1, 5);
 ```
-

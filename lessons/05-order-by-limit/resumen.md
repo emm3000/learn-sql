@@ -17,6 +17,6 @@
 ## Siguiente paso
 
 Cuando esto ya salga bien, pasamos a:
+
 - `JOIN`
 - relaciones entre tablas
-

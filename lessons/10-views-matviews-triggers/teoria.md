@@ -19,4 +19,3 @@ Un `trigger` dispara una accion automatica cuando ocurre un evento, como `INSERT
 - `VIEW` = capa de lectura reutilizable
 - `MATERIALIZED VIEW` = reporte precalculado
 - `TRIGGER` = automatizacion al escribir datos
-

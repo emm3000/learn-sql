@@ -31,4 +31,3 @@ WHERE total_employees >= 2;
 ## Caso 3: hacer mas legible una consulta grande
 
 En una base real, dividir una consulta en partes hace que sea mas facil mantenerla y revisarla.
-

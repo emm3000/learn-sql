@@ -16,7 +16,7 @@
 ## Siguiente paso
 
 Cuando esto ya salga bien, pasamos a:
+
 - `UPDATE`
 - `DELETE`
 - `DISTINCT`
-

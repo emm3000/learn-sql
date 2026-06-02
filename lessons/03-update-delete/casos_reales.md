@@ -29,4 +29,3 @@ SET mensaje = 'Cambio auditado'
 WHERE id = 1
 RETURNING *;
 ```
-

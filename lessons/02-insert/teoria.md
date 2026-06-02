@@ -38,4 +38,3 @@ RETURNING *;
 
 Con `INSERT`, el orden de columnas y valores debe coincidir.
 Si te equivocas ahi, puedes guardar datos incorrectos o romper la consulta.
-

@@ -44,4 +44,3 @@ LIMIT 10;
 
 `SELECT` no solo sirve para “ver datos”.
 Sirve para pensar en consultas precisas y predecibles.
-

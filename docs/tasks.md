@@ -85,11 +85,11 @@ near-miss cases; no false negatives on alias/order differences when options allo
 
 Goal: the interactive widget. ADR-0007, ADR-0008.
 
-- [ ] M3.1 CodeMirror 6 editor with SQL/PostgreSQL syntax highlighting — ADR-0008
-- [ ] M3.2 Run button → worker (M1) → results table — FR-3, FR-4
-- [ ] M3.3 Readable error panel on failed queries (no page crash) — FR-5
-- [ ] M3.4 Reset-database button — FR-9
-- [ ] M3.5 Grade button wired to the grading engine (M2): pass/fail + specific reason — FR-6
+- [x] M3.1 CodeMirror 6 editor with SQL/PostgreSQL syntax highlighting — ADR-0008
+- [x] M3.2 Run button → worker (M1) → results table — FR-3, FR-4
+- [x] M3.3 Readable error panel on failed queries (no page crash) — FR-5
+- [x] M3.4 Reset-database button — FR-9
+- [x] M3.5 Grade button wired to the grading engine (M2): pass/fail + specific reason — FR-6
 
 Definition of done: a standalone page mounts the island, runs arbitrary SQL against the
 seed, shows results/errors, resets, and grades a hard-coded exercise.

@@ -23,4 +23,3 @@ Cuando necesitas conservar todas las filas de la tabla principal aunque falte in
 **Que pasa en una base real si haces un join sin indices**
 
 En tablas grandes puede volverse lento. El join puede seguir funcionando, pero el costo puede crecer mucho.
-

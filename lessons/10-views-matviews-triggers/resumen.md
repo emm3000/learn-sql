@@ -15,7 +15,7 @@
 ## Siguiente paso
 
 Cuando esto ya salga bien, pasamos a:
+
 - transacciones
 - locks
 - concurrencia
-

@@ -38,4 +38,3 @@ SELECT *
 FROM saludos
 WHERE mensaje LIKE 'Hola%';
 ```
-

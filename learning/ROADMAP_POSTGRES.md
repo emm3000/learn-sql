@@ -37,9 +37,11 @@ SQL, modelado, analitica, funciones, performance, operaciones y uso real en proy
 ## Fase 0: Setup minimo
 
 ### Objetivo
+
 Tener un entorno simple para practicar sin friccion.
 
 ### Debes dominar
+
 - Docker
 - Docker Compose
 - `psql` y sus meta-comandos (`\dt`, `\d tabla`, `\l`, `\du`, `\timing`, `\x`)
@@ -48,6 +50,7 @@ Tener un entorno simple para practicar sin friccion.
 - conectar desde terminal
 
 ### Practica
+
 - levantar PostgreSQL con Docker
 - crear una base de datos
 - crear un usuario
@@ -56,14 +59,17 @@ Tener un entorno simple para practicar sin friccion.
 - activar `\timing` y leer cuanto tarda una query
 
 ### Meta
+
 Poder iniciar una base y entrar a ella sin buscar tutorial.
 
 ## Fase 1: SQL base
 
 ### Objetivo
+
 Escribir consultas basicas de forma natural.
 
 ### Debes dominar
+
 - `SELECT`
 - `FROM`
 - `WHERE`
@@ -81,6 +87,7 @@ Escribir consultas basicas de forma natural.
 - `COALESCE` y `NULLIF`
 
 ### Practica
+
 - 20 queries cortas por dia
 - filtrar datos por condiciones distintas
 - insertar, actualizar y borrar registros
@@ -89,14 +96,17 @@ Escribir consultas basicas de forma natural.
 - detectar errores por `NULL`
 
 ### Meta
+
 Poder leer una tabla y consultar lo que necesitas sin dudar demasiado.
 
 ## Fase 2: Tipos de datos, texto y fechas
 
 ### Objetivo
+
 Entender que guarda cada columna y como manipular texto y tiempo sin sorpresas.
 
 ### Debes dominar
+
 - numericos (`integer`, `bigint`, `numeric`, `real` vs `double precision`)
 - texto (`text` vs `varchar`, cuando usar cada uno)
 - booleanos
@@ -110,6 +120,7 @@ Entender que guarda cada columna y como manipular texto y tiempo sin sorpresas.
 - `date_trunc`, `extract`, `age`, `now`
 
 ### Practica
+
 - agrupar ventas por dia, semana y mes con `date_trunc`
 - calcular antiguedad o tiempo transcurrido
 - limpiar texto sucio (espacios, mayusculas, nulos)
@@ -117,14 +128,17 @@ Entender que guarda cada columna y como manipular texto y tiempo sin sorpresas.
 - generar series de fechas para rellenar huecos en un reporte
 
 ### Meta
+
 Que ningun tipo de dato te sorprenda y que las fechas dejen de ser un dolor de cabeza.
 
 ## Fase 3: Relaciones y joins
 
 ### Objetivo
+
 Entender como se conectan los datos entre tablas.
 
 ### Debes dominar
+
 - claves primarias
 - claves foraneas
 - relaciones 1 a 1
@@ -141,6 +155,7 @@ Entender como se conectan los datos entre tablas.
 - alias de tablas
 
 ### Practica
+
 - modelar usuarios, pedidos y productos
 - resolver preguntas usando joins
 - explicar por que cada join devuelve lo que devuelve
@@ -148,14 +163,17 @@ Entender como se conectan los datos entre tablas.
 - detectar joins incorrectos o incompletos (filas duplicadas, filas perdidas)
 
 ### Meta
+
 Poder moverte entre tablas como si fuera un mapa conocido.
 
 ## Fase 4: Agregacion y analitica
 
 ### Objetivo
+
 Responder preguntas de negocio con SQL, incluyendo analitica avanzada.
 
 ### Debes dominar
+
 - `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`
 - `GROUP BY`
 - `HAVING`
@@ -169,6 +187,7 @@ Responder preguntas de negocio con SQL, incluyendo analitica avanzada.
 - frames de ventana (`ROWS BETWEEN ...`)
 
 ### Practica
+
 - ventas por dia, por usuario, por categoria
 - top 3 productos por categoria con `ROW_NUMBER`
 - ranking de clientes por gasto
@@ -178,14 +197,17 @@ Responder preguntas de negocio con SQL, incluyendo analitica avanzada.
 - reescribir una query en varias formas y comparar
 
 ### Meta
+
 Pensar en terminos de preguntas y resultados, y resolver analitica sin subqueries horribles.
 
 ## Fase 5: Subqueries, CTEs, recursividad y LATERAL
 
 ### Objetivo
+
 Estructurar consultas complejas en pasos claros y resolver problemas jerarquicos.
 
 ### Debes dominar
+
 - subqueries en `SELECT`, `FROM` y `WHERE`
 - subqueries correlacionadas
 - `EXISTS` vs `IN` vs `JOIN`
@@ -195,6 +217,7 @@ Estructurar consultas complejas en pasos claros y resolver problemas jerarquicos
 - cuando un CTE ayuda y cuando esconde un problema de performance
 
 ### Practica
+
 - empleados con salario mayor al promedio (correlacionada)
 - reescribir una query larga en pasos con `WITH`
 - recorrer una jerarquia de categorias o empleados con `WITH RECURSIVE`
@@ -202,14 +225,17 @@ Estructurar consultas complejas en pasos claros y resolver problemas jerarquicos
 - comparar `EXISTS` vs `IN` en una tabla grande
 
 ### Meta
+
 Romper un problema grande en piezas legibles sin perder rendimiento.
 
 ## Fase 6: Modelado, normalizacion e integridad
 
 ### Objetivo
+
 Crear bases de datos limpias y resistentes a errores.
 
 ### Debes dominar
+
 - tipos de datos elegidos con criterio
 - `PRIMARY KEY` (natural vs surrogate)
 - `FOREIGN KEY` y acciones (`ON DELETE CASCADE`, `RESTRICT`, `SET NULL`)
@@ -226,6 +252,7 @@ Crear bases de datos limpias y resistentes a errores.
 - diseno para lectura y escritura
 
 ### Practica
+
 - redisenar una tabla mal hecha
 - detectar duplicados y datos invalidos
 - crear un esquema desde cero con todas las constraints
@@ -233,14 +260,17 @@ Crear bases de datos limpias y resistentes a errores.
 - decidir que va en cada tabla y por que
 
 ### Meta
+
 Poner buenas reglas antes de que los datos se conviertan en basura.
 
 ## Fase 7: Functions, procedures y logica en la base
 
 ### Objetivo
+
 Encapsular logica util dentro de PostgreSQL cuando tenga sentido.
 
 ### Debes dominar
+
 - `CREATE FUNCTION`
 - parametros de entrada y salida
 - valores de retorno (`RETURNS valor`, `RETURNS TABLE`, `RETURNS SETOF`)
@@ -252,6 +282,7 @@ Encapsular logica util dentro de PostgreSQL cuando tenga sentido.
 - diferencia entre `FUNCTION` y `PROCEDURE` (y por que un procedure puede manejar transacciones)
 
 ### Practica
+
 - funcion escalar que retorna un valor
 - funcion que retorna filas (`RETURNS TABLE`)
 - funcion con logica condicional
@@ -260,14 +291,17 @@ Encapsular logica util dentro de PostgreSQL cuando tenga sentido.
 - marcar bien la volatilidad y ver el impacto en el planner
 
 ### Meta
+
 Saber cuando la logica debe vivir en SQL y cuando no.
 
 ## Fase 8: Views, materialized views y triggers
 
 ### Objetivo
+
 Reutilizar consultas y automatizar reglas comunes.
 
 ### Debes dominar
+
 - `VIEW`
 - views actualizables y `WITH CHECK OPTION`
 - `MATERIALIZED VIEW`
@@ -280,6 +314,7 @@ Reutilizar consultas y automatizar reglas comunes.
 - cuando un trigger es util y cuando es magia peligrosa
 
 ### Practica
+
 - crear vistas para simplificar consultas
 - crear una materialized view para un reporte pesado
 - refrescar la materialized view tras un cambio
@@ -288,14 +323,17 @@ Reutilizar consultas y automatizar reglas comunes.
 - comparar view vs materialized view vs tabla base
 
 ### Meta
+
 Construir automatizacion util, no magia innecesaria.
 
 ## Fase 9: Transacciones, MVCC y concurrencia
 
 ### Objetivo
+
 Manejar cambios de datos con seguridad cuando hay varios procesos a la vez.
 
 ### Debes dominar
+
 - `BEGIN`, `COMMIT`, `ROLLBACK`
 - `SAVEPOINT`
 - como funciona MVCC en PostgreSQL
@@ -308,6 +346,7 @@ Manejar cambios de datos con seguridad cuando hay varios procesos a la vez.
 - idempotencia y consistencia
 
 ### Practica
+
 - transacciones exitosas y transacciones que retroceden
 - simular dos sesiones tocando la misma fila
 - provocar y resolver un deadlock a proposito
@@ -315,14 +354,17 @@ Manejar cambios de datos con seguridad cuando hay varios procesos a la vez.
 - comparar el comportamiento entre niveles de aislamiento
 
 ### Meta
+
 No romper datos cuando hay mas de una operacion ocurriendo al mismo tiempo.
 
 ## Fase 10: Indices y estructuras de acceso
 
 ### Objetivo
+
 Saber que indice crear, por que, y que cuesta mantenerlo.
 
 ### Debes dominar
+
 - como funciona un indice por debajo
 - `B-tree` (el default)
 - `Hash`
@@ -337,6 +379,7 @@ Saber que indice crear, por que, y que cuesta mantenerlo.
 - costo de escritura y espacio de cada indice
 
 ### Practica
+
 - comparar una query con y sin indice
 - elegir el indice correcto para un patron de consulta
 - crear un indice parcial (solo filas activas)
@@ -345,14 +388,17 @@ Saber que indice crear, por que, y que cuesta mantenerlo.
 - ver un index-only scan en `EXPLAIN`
 
 ### Meta
+
 Crear el indice justo, no un indice por las dudas.
 
 ## Fase 11: Performance, EXPLAIN y planner
 
 ### Objetivo
+
 Entender por que una query va lenta y arreglarla con criterio.
 
 ### Debes dominar
+
 - selectividad y cardinalidad
 - `EXPLAIN`
 - `EXPLAIN (ANALYZE, BUFFERS)`
@@ -366,6 +412,7 @@ Entender por que una query va lenta y arreglarla con criterio.
 - reescritura de queries para ayudar al planner
 
 ### Practica
+
 - revisar planes de ejecucion reales
 - detectar scans costosos y arreglarlos
 - encontrar una mala estimacion del planner y corregirla con estadisticas
@@ -373,14 +420,17 @@ Entender por que una query va lenta y arreglarla con criterio.
 - comparar el plan antes y despues de un indice
 
 ### Meta
+
 No solo hacer que funcione, sino entender por que funciona asi.
 
 ## Fase 12: Features avanzadas de PostgreSQL
 
 ### Objetivo
+
 Conocer lo que hace especial a PostgreSQL y elegir bien.
 
 ### Debes dominar
+
 - `JSONB`: operadores (`->`, `->>`, `@>`, `?`), `jsonb_path_query`, indexado con `GIN`
 - `JSON` vs `JSONB` y cuando usar cada uno
 - arrays y sus operadores
@@ -395,6 +445,7 @@ Conocer lo que hace especial a PostgreSQL y elegir bien.
 - extensiones (`pg_trgm`, `pgcrypto`, `uuid-ossp`, `citext`, `hstore`, `postgis`)
 
 ### Practica
+
 - guardar y consultar `JSONB` con indice `GIN`
 - implementar busqueda de texto eficiente con ranking
 - busqueda por similitud con `pg_trgm`
@@ -403,14 +454,17 @@ Conocer lo que hace especial a PostgreSQL y elegir bien.
 - elegir entre columna normal y `JSONB` para un caso real
 
 ### Meta
+
 Elegir la herramienta correcta para cada caso real.
 
 ## Fase 13: Seguridad, roles y RLS
 
 ### Objetivo
+
 Controlar quien ve y quien cambia cada dato.
 
 ### Debes dominar
+
 - roles vs usuarios
 - `GRANT` y `REVOKE`
 - privilegios a nivel tabla, columna y schema
@@ -423,6 +477,7 @@ Controlar quien ve y quien cambia cada dato.
 - principio de menor privilegio
 
 ### Practica
+
 - crear roles con permisos distintos (lectura, escritura, admin)
 - restringir columnas sensibles
 - implementar RLS para que cada tenant vea solo sus filas
@@ -430,14 +485,17 @@ Controlar quien ve y quien cambia cada dato.
 - revisar privilegios efectivos de un rol
 
 ### Meta
+
 Que la base proteja los datos aunque la app tenga un bug.
 
 ## Fase 14: Migraciones y evolucion de esquema
 
 ### Objetivo
+
 Cambiar un esquema en produccion sin romper nada ni frenar el servicio.
 
 ### Debes dominar
+
 - DDL transaccional en PostgreSQL (la mayoria de los `ALTER` son transaccionales)
 - agregar columnas de forma segura
 - backfill de datos en lotes
@@ -449,6 +507,7 @@ Cambiar un esquema en produccion sin romper nada ni frenar el servicio.
 - locks que toma cada `ALTER` y por que importan
 
 ### Practica
+
 - escribir una migracion que agrega una columna `NOT NULL` sin bloquear la tabla
 - agregar una foreign key sin frenar escrituras
 - crear un indice en una tabla grande sin downtime
@@ -456,14 +515,17 @@ Cambiar un esquema en produccion sin romper nada ni frenar el servicio.
 - escribir el rollback de una migracion
 
 ### Meta
+
 Evolucionar la base con la misma seguridad que el codigo.
 
 ## Fase 15: Integracion con aplicaciones
 
 ### Objetivo
+
 Conectar PostgreSQL con una app real sin caer en trampas clasicas.
 
 ### Debes dominar
+
 - conexion desde una app y ciclo de vida de la conexion
 - connection pooling (pgBouncer) y por que se necesita
 - prepared statements
@@ -476,6 +538,7 @@ Conectar PostgreSQL con una app real sin caer en trampas clasicas.
 - timeouts (`statement_timeout`, `idle_in_transaction_session_timeout`)
 
 ### Practica
+
 - conectar una app pequena a la base
 - reproducir un N+1 y arreglarlo
 - implementar una cola de tareas con SKIP LOCKED
@@ -483,14 +546,17 @@ Conectar PostgreSQL con una app real sin caer en trampas clasicas.
 - configurar un pool y medir el efecto
 
 ### Meta
+
 Que la base y la app convivan sin sorpresas en produccion.
 
 ## Fase 16: Operacion y administracion
 
 ### Objetivo
+
 Poder sostener una base en un entorno real.
 
 ### Debes dominar
+
 - backups: `pg_dump`, `pg_restore`, `pg_basebackup`
 - restore y verificacion del backup
 - WAL y Point-In-Time Recovery (PITR)
@@ -505,6 +571,7 @@ Poder sostener una base en un entorno real.
 - upgrades de version
 
 ### Practica
+
 - hacer backup y restore completo, y verificar que sirve
 - simular una recuperacion ante fallo
 - revisar conexiones activas y matar una query colgada
@@ -513,14 +580,17 @@ Poder sostener una base en un entorno real.
 - ajustar un parametro de memoria y medir el efecto
 
 ### Meta
+
 Operar PostgreSQL con criterio de produccion.
 
 ## Fase 17: Casos de uso reales
 
 ### Objetivo
+
 Aplicar lo aprendido en proyectos reales de punta a punta.
 
 ### Casos recomendados
+
 - blog con comentarios
 - ecommerce con pedidos e inventario
 - sistema de tareas con cola de trabajo
@@ -530,6 +600,7 @@ Aplicar lo aprendido en proyectos reales de punta a punta.
 - auditoria de eventos con triggers
 
 ### Practica
+
 - disenar el esquema desde cero con constraints
 - escribir consultas reales (incluyendo analitica con window functions)
 - agregar funciones, vistas y triggers utiles
@@ -538,17 +609,20 @@ Aplicar lo aprendido en proyectos reales de punta a punta.
 - refactorizar el modelo cuando aparece un requisito nuevo
 
 ### Meta
+
 Poder construir una app o backend pequeno con base solida.
 
 ## Rutina diaria recomendada
 
 ### Opcion corta
+
 - 10 min: repaso
 - 20 min: tema nuevo
 - 30 min: ejercicios
 - 10 min: correccion
 
 ### Opcion intensa
+
 - 15 min: repaso
 - 30 min: teoria aplicable
 - 45 min: ejercicios
@@ -556,6 +630,7 @@ Poder construir una app o backend pequeno con base solida.
 - 15 min: documentar aprendizajes
 
 ### Regla
+
 Si no escribiste SQL, ese dia no conto.
 
 ## Metodo de evaluacion
@@ -578,16 +653,19 @@ Vas bien si puedes hacer esto sin ayuda constante:
 ## Proyectos para practicar
 
 ### Nivel 1
+
 - lista de tareas
 - agenda de contactos
 - inventario simple
 
 ### Nivel 2
+
 - blog con comentarios
 - tienda con pedidos
 - sistema de reservas (con constraints de exclusion)
 
 ### Nivel 3
+
 - CRM basico multi-tenant con RLS
 - tracker de gastos con reportes analiticos
 - tablero de metricas con materialized views

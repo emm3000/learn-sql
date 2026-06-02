@@ -29,4 +29,3 @@ SELECT e.first_name, e.last_name, d.name
 FROM employees e
 LEFT JOIN departments d ON d.id = e.department_id;
 ```
-

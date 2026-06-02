@@ -34,4 +34,3 @@ Aprender a filtrar datos de forma precisa y entender como se comportan los valor
 - `casos_reales.md`
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
-

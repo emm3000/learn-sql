@@ -17,4 +17,3 @@ Si, porque te ayuda a comprobar el resultado de inmediato.
 **Primero actualizo o borro y luego consulto**
 
 Si estas aprendiendo, es buena practica consultar despues para confirmar lo que paso.
-

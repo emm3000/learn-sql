@@ -31,4 +31,3 @@ SELECT *
 FROM saludos
 ORDER BY mensaje ASC, id ASC;
 ```
-

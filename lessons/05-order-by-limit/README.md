@@ -29,4 +29,3 @@ Aprender a ordenar resultados y limitar cuantas filas devuelve una consulta, alg
 - `casos_reales.md`
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
-

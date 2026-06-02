@@ -28,4 +28,3 @@ Aprender a guardar datos nuevos en PostgreSQL con seguridad y claridad.
 - `casos_reales.md`
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
-

@@ -39,4 +39,3 @@ RETURNING *;
 
 Si olvidas `WHERE`, puedes afectar toda la tabla.
 En esta leccion, el filtro importa tanto como la accion.
-

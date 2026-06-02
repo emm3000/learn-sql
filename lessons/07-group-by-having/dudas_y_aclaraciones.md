@@ -23,4 +23,3 @@ Si. Reportes, dashboards, KPIs y resúmenes operativos usan este patron todo el 
 **Puede ser lento en tablas grandes**
 
 Si, especialmente si no hay indices o si agrupas grandes volúmenes de datos. En bases reales, la forma de agrupar y los filtros previos importan bastante.
-

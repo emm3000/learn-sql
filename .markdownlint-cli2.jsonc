@@ -4,7 +4,7 @@
     // MD013: line length — disabled; long SQL lines are unavoidable in lesson content.
     "MD013": false,
     // MD033: no inline HTML — disabled; Astro components use HTML in .astro files.
-    "MD033": false
+    "MD033": false,
   },
   "ignores": [
     "node_modules/**",
@@ -13,6 +13,6 @@
     // Spanish source content — authored in its own style, not linted.
     "learning/**",
     "lessons/**",
-    "seed/**"
-  ]
+    "seed/**",
+  ],
 }

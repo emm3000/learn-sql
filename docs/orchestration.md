@@ -35,7 +35,7 @@ implementation work.
 - **Delegate**: understanding that needs 4+ files, writes touching 2+ non-trivial
   files, anything that reads-then-writes, running tests/builds.
 
-Rule of thumb: *does this inflate my context without need?* If yes, delegate.
+Rule of thumb: _does this inflate my context without need?_ If yes, delegate.
 
 ## Parallelism & worktrees
 

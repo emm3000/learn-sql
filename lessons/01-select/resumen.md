@@ -17,7 +17,7 @@
 ## Siguiente paso
 
 Cuando esto ya salga bien, pasamos a:
+
 - `INSERT`
 - `UPDATE`
 - `DELETE`
-

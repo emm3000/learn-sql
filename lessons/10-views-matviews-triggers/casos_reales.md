@@ -27,4 +27,3 @@ UPDATE customers SET city = 'Lima' WHERE id = 1;
 ```
 
 El trigger puede actualizar `updated_at` automaticamente.
-

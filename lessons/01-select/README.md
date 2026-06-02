@@ -28,4 +28,3 @@ Aprender a leer datos de PostgreSQL con consultas simples y claras.
 - `casos_reales.md`
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
-

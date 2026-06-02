@@ -30,4 +30,3 @@ FROM employees
 GROUP BY department_id
 HAVING COUNT(*) >= 2;
 ```
-

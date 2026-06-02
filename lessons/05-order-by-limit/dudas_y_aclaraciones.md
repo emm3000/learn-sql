@@ -23,4 +23,3 @@ Si. Eso ayuda mucho cuando hay empates y necesitas un desempate estable.
 **Por que ordenar antes de limitar**
 
 Porque primero decides el orden y luego recortas el resultado. Si lo haces al revés, no controlas bien que filas quedan dentro del corte.
-

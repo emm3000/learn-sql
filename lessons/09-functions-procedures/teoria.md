@@ -56,4 +56,3 @@ $$;
 
 Usa `function` para reutilizar logica de lectura o calculo.
 Usa `procedure` para operaciones controladas que modifican datos.
-

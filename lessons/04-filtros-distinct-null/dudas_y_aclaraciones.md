@@ -23,4 +23,3 @@ Tu query puede devolver menos resultados de los que esperas o comportarse de for
 **`LIKE` sirve siempre**
 
 Sirve para buscar patrones simples, pero en tablas grandes o busquedas complejas puede no ser lo mas eficiente.
-
