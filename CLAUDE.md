@@ -67,6 +67,16 @@ significant decision means a new ADR — see `docs/adr/README.md` for the format
 - **Surgical changes.** Touch only what the task requires and match the existing style.
   Do not reformat, refactor, or "improve" adjacent code or the Spanish source content
   while doing something else.
+- **No SDD.** This project does NOT use the Spec-Driven Development workflow
+  (`/sdd-*`, proposals/specs/design artifacts). Do not propose it or run the SDD Init
+  Guard. Plan with the existing docs (`docs/prd.md`, `docs/adr/`, `docs/tasks.md`) and
+  implement directly. Delegation rules still apply: delegate multi-file implementation
+  and review diffs in fresh context before committing.
+- **Delegation models.** Writer/implementer sub-agents run on **Sonnet**.
+  Validator/reviewer sub-agents (auditing what a writer produced) run on **Opus 4.8**
+  — the strongest model judges the work. Always delegate in **fresh sub-agent contexts**
+  to keep the main orchestrator thread lean; the main thread coordinates and synthesizes,
+  it does not implement.
 
 ## Project state (context)
 
