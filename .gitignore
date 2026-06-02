@@ -28,3 +28,7 @@ skills-lock.json
 # MCP — local config and run artifacts (keep out of the repo for now)
 .mcp.json
 .playwright-mcp/
+
+# Playwright
+test-results/
+playwright-report/

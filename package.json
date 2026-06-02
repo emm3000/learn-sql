@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "check": "astro check",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "lint:md": "markdownlint-cli2 \"**/*.md\" \"!node_modules\"",
     "format": "prettier --write ."
   },
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.9",
+    "@playwright/test": "1.60.0",
     "markdownlint-cli2": "0.22.1",
     "prettier": "3.8.3",
     "prettier-plugin-astro": "0.14.1",
