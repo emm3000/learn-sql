@@ -30,14 +30,14 @@ M0 scaffold
 
 Goal: a running Astro project with the content pipeline and shared schemas in place.
 
-- [ ] M0.1 Scaffold an Astro project (TypeScript, strict) — ADR-0006
-- [ ] M0.2 Add the Svelte integration for islands — ADR-0007
-- [ ] M0.3 Configure Content Collections for lessons (prose) with a Zod schema — ADR-0006
-- [ ] M0.4 Define the exercise schema in Zod/TS: `id`, `prompt`, `starterSql`,
+- [x] M0.1 Scaffold an Astro project (TypeScript, strict) — ADR-0006
+- [x] M0.2 Add the Svelte integration for islands — ADR-0007
+- [x] M0.3 Configure Content Collections for lessons (prose) with a Zod schema — ADR-0006
+- [x] M0.4 Define the exercise schema in Zod/TS: `id`, `prompt`, `starterSql`,
       `expectedSql`, `gradeMode` (`result` | `state`), `verificationSql`,
       `compareOptions` (`orderMatters`, `checkColumnNames`, `numericTolerance`) — ADR-0009
-- [ ] M0.5 Tooling: markdownlint, formatter/linter, a unit-test runner (for the grading engine)
-- [ ] M0.6 Make `seed/classic_company.sql` importable by the app as a string/asset
+- [x] M0.5 Tooling: markdownlint, formatter/linter, a unit-test runner (for the grading engine)
+- [x] M0.6 Make `seed/classic_company.sql` importable by the app as a string/asset
 
 Definition of done: `npm run dev` serves a blank Astro site; a sample lesson and a sample
 exercise validate against their schemas at build time.

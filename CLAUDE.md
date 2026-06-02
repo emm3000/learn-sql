@@ -1,6 +1,6 @@
 # CLAUDE.md — Postgres Playground
 
-<!-- Last reviewed: 2026-06-02. Prune "Project state" when scaffolding begins. -->
+<!-- Last reviewed: 2026-06-02. Keep "Project state" current as milestones land. -->
 
 Working guide for this repository. Read this first.
 
@@ -20,19 +20,30 @@ IMPORTANT: Product code, UI strings, comments, commit messages and everything un
 `ROADMAP_POSTGRES.md`, `WORKFLOW.md`) is in **Spanish** — do NOT translate it unless
 migrating that content into the app.
 
-IMPORTANT: The Astro app is NOT scaffolded yet. Do not create `src/`, a project
-skeleton, or install dependencies until scaffolding is explicitly requested.
+The Astro app is scaffolded (M0 done). It lives at the repo root: `package.json`,
+`astro.config.mjs`, `src/`. Package manager is **pnpm** and dependency versions are
+**pinned exactly** (no ranges) on purpose — see `docs/adr/` and keep it that way.
 
 ## Commands
 
-Practice PostgreSQL locally (the only runnable setup today):
+App (pnpm, from `postgres/`):
+
+```bash
+pnpm install        # install pinned deps
+pnpm dev            # serve the Astro site locally
+pnpm build          # astro check && astro build (type + content-schema validation)
+pnpm test           # vitest (grading engine and schema tests)
+pnpm check          # astro check only
+pnpm lint:md        # markdownlint-cli2
+pnpm format         # prettier (+ prettier-plugin-astro)
+```
+
+Practice PostgreSQL locally against the seed (independent of the app):
 
 ```bash
 docker compose up -d
 docker compose exec -T db psql -U postgres -d aprendizaje < seed/classic_company.sql
 ```
-
-App dev / build / test commands: to be added here when the Astro app is scaffolded.
 
 ## Read before you build (doc-first)
 
@@ -59,7 +70,8 @@ significant decision means a new ADR — see `docs/adr/README.md` for the format
 
 ## Project state (context)
 
-- Phase: documentation. The app is not scaffolded yet.
+- Phase: implementation. M0 (scaffold + content pipeline + schemas) is done; M1 (PGlite
+  engine) is next — see `docs/tasks.md`.
 - MVP scope: the belt framework plus three Beginner lessons (SELECT, INSERT,
   UPDATE/DELETE), fully auto-graded. Later belts are "coming soon".
 - Known blocker: exercise solutions do not exist yet and must be authored

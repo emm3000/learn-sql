@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Astro build output
+dist/
+.astro/
+
+# pnpm
+.pnpm-store/
+
+# Vite cache
+.vite/
+
+# OS
+.DS_Store
+
+# Editor
+.idea/
+*.swp
