@@ -157,7 +157,10 @@ Goal: ship it as a real public product. NFRs.
 - [x] M7.4 Responsive: readable on mobile; editor best-effort — NFR-10
       (tightened body padding ≤480px; fixed landing CLS by SSR-rendering the belt list)
 - [x] M7.5 Unsupported-browser message (no WASM / no Web Worker) — NFR-9
-- [ ] M7.6 Cookieless analytics for the success metrics — NFR-11
+- [x] M7.6 Cookieless analytics for the success metrics — NFR-11
+      (Cloudflare Web Analytics beacon, token-gated via PUBLIC_CF_BEACON_TOKEN.
+      MVP scope = pageviews + Web Vitals; the behavioral funnel M1–M5 needs custom
+      events, which Web Analytics does not support — deferred post-launch)
 - [ ] M7.7 Deploy to the chosen static host
 - [x] M7.8 End-to-end smoke test (Playwright): in a real browser, load Lesson 01, run a
       query against PGlite, and assert results render — the safety net proving the M1–M6

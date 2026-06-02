@@ -11,6 +11,11 @@ dist/
 # Vite cache
 .vite/
 
+# Environment (the example file is tracked)
+.env
+.env.*
+!.env.example
+
 # OS
 .DS_Store
 

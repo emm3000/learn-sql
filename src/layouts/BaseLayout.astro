@@ -11,6 +11,12 @@ const SITE_NAME = 'Postgres Playground';
 
 const { title, description, canonical } = Astro.props;
 
+// Cloudflare Web Analytics beacon (cookieless) — NFR-11. The token is set
+// per-environment via PUBLIC_CF_BEACON_TOKEN; when absent (e.g. local dev) the
+// beacon is omitted. Do NOT also enable dashboard auto-injection on Cloudflare
+// Pages with this present — that double-counts page views.
+const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
+
 const fullTitle = title === SITE_NAME ? SITE_NAME : `${title} — ${SITE_NAME}`;
 
 let canonicalURL: string;
@@ -45,6 +51,17 @@ if (canonical) {
     <meta name="twitter:description" content={description} />
 
     <meta name="generator" content={Astro.generator} />
+
+    {
+      cfBeaconToken && (
+        <script
+          is:inline
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}
+        />
+      )
+    }
     <slot name="head" />
   </head>
   <body>
