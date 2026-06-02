@@ -118,11 +118,11 @@ exercises, and returns later to find progress restored.
 
 Goal: the journey UI around the lessons. ADR-0005.
 
-- [ ] M5.1 Belt map as the main navigation: 5 belts, Beginner active, others "coming soon"
+- [x] M5.1 Belt map as the main navigation: 5 belts, Beginner active, others "coming soon"
       — FR-1, NG8
-- [ ] M5.2 Navigation between belts, lessons, and exercises — FR-11
-- [ ] M5.3 Progress shown along the belt path — FR-11
-- [ ] M5.4 Soft gating: recommended order, free navigation within the active belt — FR-12
+- [x] M5.2 Navigation between belts, lessons, and exercises — FR-11
+- [x] M5.3 Progress shown along the belt path — FR-11
+- [x] M5.4 Soft gating: recommended order, free navigation within the active belt — FR-12
 
 Definition of done: from the belt map, a learner reaches Lesson 01, sees progress on the
 path, and later belts read clearly as "coming soon".

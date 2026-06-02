@@ -13,7 +13,7 @@ const lessons = defineCollection({
     title: z.string(),
     description: z.string(),
     order: z.number().int().positive(),
-    belt: z.enum(['beginner', 'intermediate', 'advanced', 'expert', 'master']),
+    belt: z.enum(['beginner', 'intermediate', 'advanced', 'ninja', 'insane']),
     draft: z.boolean().optional().default(false),
   }),
 });

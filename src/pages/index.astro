@@ -1,6 +1,20 @@
 ---
-// Postgres Playground — placeholder landing page.
-// This will be replaced by the belt map in M5.
+import { getCollection } from 'astro:content';
+import { belts } from '../lib/belts.ts';
+import { exercisesByLesson } from '../lib/exercises/index.ts';
+import BeltLessons from '../components/BeltLessons.svelte';
+
+// Load non-draft lessons for the active (beginner) belt, sorted by order.
+const allLessons = await getCollection('lessons', ({ data }) => !data.draft);
+const beginnerLessons = allLessons
+  .filter((entry) => entry.data.belt === 'beginner')
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((entry) => ({
+    slug: entry.id,
+    title: entry.data.title,
+    order: entry.data.order,
+    exerciseCount: exercisesByLesson[entry.id]?.length ?? 0,
+  }));
 ---
 
 <!doctype html>
@@ -8,10 +22,156 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Postgres Playground</title>
+    <title>Postgres Playground — Learn PostgreSQL in the browser</title>
   </head>
   <body>
-    <h1>Postgres Playground</h1>
-    <p>Coming soon.</p>
+    <header class="site-header">
+      <h1>Postgres Playground</h1>
+      <p class="site-tagline">
+        Learn PostgreSQL by writing real SQL — no setup, no account, runs in
+        your browser.
+      </p>
+    </header>
+
+    <main>
+      <h2 class="path-heading">Your Learning Path</h2>
+      <ol class="belt-list">
+        {
+          belts.map((belt) => (
+            <li
+              class={`belt-card ${belt.status === 'coming-soon' ? 'belt-card--coming-soon' : ''}`}
+              style={`--belt-color: ${belt.color};`}
+            >
+              <div class="belt-card-header">
+                <div class="belt-indicator" aria-hidden="true" />
+                <div class="belt-meta">
+                  <h3 class="belt-name">{belt.name}</h3>
+                  <p class="belt-subtitle">{belt.subtitle}</p>
+                </div>
+                {belt.status === 'coming-soon' && (
+                  <span class="coming-soon-badge">Coming soon</span>
+                )}
+              </div>
+
+              {belt.status === 'active' && (
+                <div class="belt-lessons">
+                  <BeltLessons lessons={beginnerLessons} client:only="svelte" />
+                </div>
+              )}
+            </li>
+          ))
+        }
+      </ol>
+    </main>
   </body>
 </html>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 24px;
+    background: #f9fafb;
+    color: #111827;
+  }
+
+  .site-header {
+    margin-bottom: 32px;
+    max-width: 720px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 800;
+    margin: 0 0 8px;
+    color: #111827;
+  }
+
+  .site-tagline {
+    margin: 0;
+    color: #6b7280;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .path-heading {
+    font-size: 18px;
+    font-weight: 700;
+    color: #374151;
+    margin: 0 0 16px;
+  }
+
+  .belt-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 720px;
+  }
+
+  .belt-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-left: 4px solid var(--belt-color);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .belt-card--coming-soon {
+    opacity: 0.55;
+  }
+
+  .belt-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .belt-indicator {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--belt-color);
+    margin-top: 4px;
+  }
+
+  .belt-meta {
+    flex: 1;
+  }
+
+  .belt-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 3px;
+  }
+
+  .belt-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.4;
+  }
+
+  .coming-soon-badge {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: #f3f4f6;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+  }
+
+  .belt-lessons {
+    margin-top: 16px;
+    border-top: 1px solid #f3f4f6;
+    padding-top: 14px;
+  }
+</style>

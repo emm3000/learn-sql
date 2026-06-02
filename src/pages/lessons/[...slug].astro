@@ -27,6 +27,9 @@ const exercises = exercisesByLesson[slug] ?? [];
     <title>{entry.data.title} — Postgres Playground</title>
   </head>
   <body>
+    <nav class="breadcrumb">
+      <a href="/" class="back-link">&#8592; Belts</a>
+    </nav>
     <header>
       <h1>{entry.data.title}</h1>
       <p>{entry.data.description}</p>
@@ -52,6 +55,21 @@ const exercises = exercisesByLesson[slug] ?? [];
     padding: 24px;
     background: #f9fafb;
     color: #111827;
+  }
+
+  .breadcrumb {
+    margin-bottom: 16px;
+  }
+
+  .back-link {
+    font-size: 14px;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .back-link:hover {
+    text-decoration: underline;
   }
 
   header {

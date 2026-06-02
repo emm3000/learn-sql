@@ -11,6 +11,7 @@ import {
   markExerciseComplete,
   isExerciseComplete,
   getCompletedExercises,
+  getLessonProgress,
 } from '../progress/progress.ts';
 
 // ── In-memory localStorage mock ───────────────────────────────────────────────
@@ -59,7 +60,9 @@ describe('progress — mark and check', () => {
 
   it('markExerciseComplete → isExerciseComplete returns true', () => {
     markExerciseComplete('01-select', 'l01-e01-select-all-customers');
-    expect(isExerciseComplete('01-select', 'l01-e01-select-all-customers')).toBe(true);
+    expect(
+      isExerciseComplete('01-select', 'l01-e01-select-all-customers'),
+    ).toBe(true);
   });
 
   it('unknown exercise → isExerciseComplete returns false', () => {
@@ -68,22 +71,30 @@ describe('progress — mark and check', () => {
 
   it('unknown lesson → isExerciseComplete returns false', () => {
     markExerciseComplete('01-select', 'l01-e01-select-all-customers');
-    expect(isExerciseComplete('99-unknown', 'l01-e01-select-all-customers')).toBe(false);
+    expect(
+      isExerciseComplete('99-unknown', 'l01-e01-select-all-customers'),
+    ).toBe(false);
   });
 
   it('markExerciseComplete is idempotent — second call does not overwrite passedAt', () => {
     const mock = injectMock(); // fresh mock for this check
     markExerciseComplete('01-select', 'l01-e01-select-all-customers');
     const rawAfterFirst = mock.getItem(STORAGE_KEY)!;
-    const firstTimestamp = (JSON.parse(rawAfterFirst) as Record<string, Record<string, { passedAt: string }>>)[
-      '01-select'
-    ]['l01-e01-select-all-customers'].passedAt;
+    const firstTimestamp = (
+      JSON.parse(rawAfterFirst) as Record<
+        string,
+        Record<string, { passedAt: string }>
+      >
+    )['01-select']['l01-e01-select-all-customers'].passedAt;
 
     markExerciseComplete('01-select', 'l01-e01-select-all-customers');
     const rawAfterSecond = mock.getItem(STORAGE_KEY)!;
-    const secondTimestamp = (JSON.parse(rawAfterSecond) as Record<string, Record<string, { passedAt: string }>>)[
-      '01-select'
-    ]['l01-e01-select-all-customers'].passedAt;
+    const secondTimestamp = (
+      JSON.parse(rawAfterSecond) as Record<
+        string,
+        Record<string, { passedAt: string }>
+      >
+    )['01-select']['l01-e01-select-all-customers'].passedAt;
 
     expect(secondTimestamp).toBe(firstTimestamp);
   });
@@ -117,6 +128,54 @@ describe('progress — getCompletedExercises', () => {
   });
 });
 
+describe('progress — getLessonProgress', () => {
+  beforeEach(() => injectMock());
+  afterEach(() => removeMock());
+
+  it('zero exercises → not done (avoids vacuous completion)', () => {
+    const result = getLessonProgress('01-select', 0);
+    expect(result).toEqual({ completed: 0, total: 0, done: false });
+  });
+
+  it('partial completion → not done', () => {
+    markExerciseComplete('01-select', 'l01-e01-select-all-customers');
+    const result = getLessonProgress('01-select', 2);
+    expect(result).toEqual({ completed: 1, total: 2, done: false });
+  });
+
+  it('all exercises complete → done', () => {
+    markExerciseComplete('01-select', 'l01-e01-select-all-customers');
+    markExerciseComplete('01-select', 'l01-e02-select-ordered');
+    const result = getLessonProgress('01-select', 2);
+    expect(result).toEqual({ completed: 2, total: 2, done: true });
+  });
+
+  it('more completed than total → still done', () => {
+    markExerciseComplete('01-select', 'l01-e01-select-all-customers');
+    markExerciseComplete('01-select', 'l01-e02-select-ordered');
+    const result = getLessonProgress('01-select', 1);
+    expect(result.done).toBe(true);
+  });
+
+  it('untouched lesson → zeroed and not done', () => {
+    const result = getLessonProgress('02-insert', 3);
+    expect(result).toEqual({ completed: 0, total: 3, done: false });
+  });
+});
+
+describe('progress — getLessonProgress SSR-safe (no localStorage)', () => {
+  // Do NOT inject a mock — exercise the path where localStorage is absent.
+
+  it('returns zeroed progress without throwing', () => {
+    expect(() => getLessonProgress('01-select', 2)).not.toThrow();
+    expect(getLessonProgress('01-select', 2)).toEqual({
+      completed: 0,
+      total: 2,
+      done: false,
+    });
+  });
+});
+
 describe('progress — corrupt JSON recovery', () => {
   beforeEach(() => injectMock());
   afterEach(() => removeMock());
@@ -136,7 +195,9 @@ describe('progress — corrupt JSON recovery', () => {
   it('after corrupt recovery, subsequent marks work correctly', () => {
     localStorage.setItem(STORAGE_KEY, 'not-json');
     markExerciseComplete('01-select', 'l01-e01-select-all-customers');
-    expect(isExerciseComplete('01-select', 'l01-e01-select-all-customers')).toBe(true);
+    expect(
+      isExerciseComplete('01-select', 'l01-e01-select-all-customers'),
+    ).toBe(true);
   });
 });
 
@@ -149,9 +210,7 @@ describe('progress — SSR-safe (no localStorage)', () => {
   });
 
   it('markExerciseComplete does not throw when localStorage is unavailable', () => {
-    expect(() =>
-      markExerciseComplete('01-select', 'l01-e01'),
-    ).not.toThrow();
+    expect(() => markExerciseComplete('01-select', 'l01-e01')).not.toThrow();
   });
 
   it('getCompletedExercises returns empty Set when localStorage is unavailable', () => {
