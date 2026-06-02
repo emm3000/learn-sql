@@ -1,0 +1,63 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+}
+
+// Placeholder product name pending final naming (PRD Q1).
+// This is the ONLY place the product name lives.
+const SITE_NAME = 'Postgres Playground';
+
+const { title, description, canonical } = Astro.props;
+
+const fullTitle = title === SITE_NAME ? SITE_NAME : `${title} — ${SITE_NAME}`;
+
+let canonicalURL: string;
+if (canonical) {
+  canonicalURL = canonical;
+} else if (Astro.site) {
+  canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+} else {
+  canonicalURL = Astro.url.pathname;
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={SITE_NAME} />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="generator" content={Astro.generator} />
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
+
+<style is:global>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 24px;
+    background: #f9fafb;
+    color: #111827;
+  }
+</style>

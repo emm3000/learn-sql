@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import LessonExercises from '../../components/LessonExercises.svelte';
 import { exercisesByLesson } from '../../lib/exercises/index.ts';
 import seedSql from '../../../seed/classic_company.sql?raw';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 
 export async function getStaticPaths() {
   const lessons = await getCollection('lessons', ({ data }) => !data.draft);
@@ -19,14 +20,7 @@ const { Content } = await render(entry);
 const exercises = exercisesByLesson[slug] ?? [];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{entry.data.title} — Postgres Playground</title>
-  </head>
-  <body>
+<BaseLayout title={entry.data.title} description={entry.data.description}>
     <nav class="breadcrumb">
       <a href="/" class="back-link">&#8592; Belts</a>
     </nav>
@@ -45,18 +39,9 @@ const exercises = exercisesByLesson[slug] ?? [];
         client:only="svelte"
       />
     </main>
-  </body>
-</html>
+</BaseLayout>
 
 <style>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    padding: 24px;
-    background: #f9fafb;
-    color: #111827;
-  }
-
   .breadcrumb {
     margin-bottom: 16px;
   }

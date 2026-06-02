@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import { belts } from '../lib/belts.ts';
 import { exercisesByLesson } from '../lib/exercises/index.ts';
 import BeltLessons from '../components/BeltLessons.svelte';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 // Load non-draft lessons for the active (beginner) belt, sorted by order.
 const allLessons = await getCollection('lessons', ({ data }) => !data.draft);
@@ -17,14 +18,10 @@ const beginnerLessons = allLessons
   }));
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Postgres Playground — Learn PostgreSQL in the browser</title>
-  </head>
-  <body>
+<BaseLayout
+  title="Learn PostgreSQL in the browser"
+  description="Learn PostgreSQL by writing real SQL — no setup, no account, runs in your browser."
+>
     <header class="site-header">
       <h1>Postgres Playground</h1>
       <p class="site-tagline">
@@ -63,18 +60,9 @@ const beginnerLessons = allLessons
         }
       </ol>
     </main>
-  </body>
-</html>
+</BaseLayout>
 
 <style>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    padding: 24px;
-    background: #f9fafb;
-    color: #111827;
-  }
-
   .site-header {
     margin-bottom: 32px;
     max-width: 720px;

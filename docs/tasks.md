@@ -149,7 +149,7 @@ own reference solutions.
 
 Goal: ship it as a real public product. NFRs.
 
-- [ ] M7.1 SEO: static rendering + meta tags for belt map and lessons — NFR-7
+- [x] M7.1 SEO: static rendering + meta tags for belt map and lessons — NFR-7
 - [ ] M7.2 Accessibility pass: keyboard nav, contrast, semantic HTML (target WCAG 2.1 AA)
       — NFR-6
 - [ ] M7.3 Performance: confirm lazy-load and time-to-first-query target — NFR-3, NFR-4
@@ -170,7 +170,7 @@ PRD success metrics; the e2e smoke test passes in CI before deploy.
 
 These are PRD open questions. They block specific tasks; resolve before that task runs.
 
-- [ ] Product name — DEFERRED; placeholder "Postgres Playground" until M7.1. PRD Q1
+- [ ] Product name — DEFERRED; placeholder "Postgres Playground" centralized in `src/layouts/BaseLayout.astro`. PRD Q1
 - [x] Analytics tool → Cloudflare Web Analytics (cookieless). M7.6. PRD Q2
 - [x] Deploy target → Cloudflare Pages. M7.7. PRD Q3
 - [x] Numeric targets → time-to-first-query < ~3s + Lighthouse Perf ≥ 90; success-% post-launch. M7.3. PRD Q4

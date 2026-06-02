@@ -2,18 +2,15 @@
 import PlaygroundIsland from '../components/Playground.svelte';
 import { lesson01Exercises } from '../lib/exercises/lesson-01.ts';
 import seedSql from '../../seed/classic_company.sql?raw';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
 const exercise = lesson01Exercises[0];
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SQL Playground — Postgres Playground</title>
-  </head>
-  <body>
+<BaseLayout
+  title="SQL Playground"
+  description="Write SQL against a real PostgreSQL database running in your browser."
+>
     <header>
       <h1>SQL Playground</h1>
       <p>
@@ -27,18 +24,9 @@ const exercise = lesson01Exercises[0];
         client:only="svelte"
       />
     </main>
-  </body>
-</html>
+</BaseLayout>
 
 <style>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    padding: 24px;
-    background: #f9fafb;
-    color: #111827;
-  }
-
   header {
     margin-bottom: 24px;
   }

@@ -2,6 +2,9 @@ import { defineConfig } from 'astro/config';
 import svelte from '@astrojs/svelte';
 
 export default defineConfig({
+  // Placeholder Cloudflare Pages domain pending final domain (ADR-0010 / PRD Q1).
+  // Used for canonical + Open Graph absolute URLs.
+  site: 'https://postgres-playground.pages.dev',
   integrations: [svelte()],
   vite: {
     optimizeDeps: {
