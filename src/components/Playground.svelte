@@ -10,9 +10,10 @@
   interface Props {
     seedSql: string;
     exercise: Exercise;
+    onComplete?: (passed: boolean) => void;
   }
 
-  const { seedSql, exercise }: Props = $props();
+  const { seedSql, exercise, onComplete }: Props = $props();
 
   // ── State ─────────────────────────────────────────────────────────────────
 
@@ -112,6 +113,7 @@
     grading = true;
     try {
       gradeResult = await gradeExercise(db, exercise, sql, seedSql);
+      onComplete?.(gradeResult.passed);
     } catch (err: unknown) {
       queryError = {
         message: err instanceof Error ? err.message : String(err),
