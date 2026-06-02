@@ -16,10 +16,14 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
+  // Run the e2e smoke test against the PRODUCTION build (astro preview serves
+  // dist/), not the dev server — Vite's dev server shims Node globals like
+  // `process`, which masked a production-only PGlite worker crash
+  // (see src/lib/db/worker.ts).
   webServer: {
-    command: 'pnpm dev',
+    command: 'pnpm build && pnpm preview --port 4321',
     url: 'http://localhost:4321',
     reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
+    timeout: 180_000,
   },
 });

@@ -152,7 +152,8 @@ Goal: ship it as a real public product. NFRs.
 - [x] M7.1 SEO: static rendering + meta tags for belt map and lessons — NFR-7
 - [x] M7.2 Accessibility pass: keyboard nav, contrast, semantic HTML (target WCAG 2.1 AA)
       — NFR-6
-- [ ] M7.3 Performance: confirm lazy-load and time-to-first-query target — NFR-3, NFR-4
+- [x] M7.3 Performance: confirm lazy-load and time-to-first-query target — NFR-3, NFR-4
+      (e2e gate now runs against the production build via `astro preview`)
 - [ ] M7.4 Responsive: readable on mobile; editor best-effort — NFR-10
 - [x] M7.5 Unsupported-browser message (no WASM / no Web Worker) — NFR-9
 - [ ] M7.6 Cookieless analytics for the success metrics — NFR-11
