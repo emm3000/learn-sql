@@ -54,3 +54,5 @@ docker compose down -v
 - [Leccion 03: UPDATE y DELETE](./lessons/03-update-delete/README.md)
 - [Leccion 04: Filtros, DISTINCT y NULL](./lessons/04-filtros-distinct-null/README.md)
 - [Leccion 05: ORDER BY y LIMIT](./lessons/05-order-by-limit/README.md)
+- [Leccion 06: JOIN](./lessons/06-join/README.md)
+- [Seed clasico](./seed/README.md)
