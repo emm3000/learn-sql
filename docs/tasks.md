@@ -184,7 +184,8 @@ sorting fundamentals — the natural next step after INSERT/UPDATE/DELETE.
 
 - [~] M8.1 ✍️ Author Lesson 04 WHERE/Filtering: prose + 5 result-based exercises
       (text equality, numeric comparison, BETWEEN, IN, IS NULL) — authoring-guide
-- [ ] M8.2 ✍️ Author Lesson 05 ORDER BY/Sorting: prose + exercises — authoring-guide
+- [~] M8.2 ✍️ Author Lesson 05 ORDER BY/Sorting: prose + 5 result-based exercises
+      (ORDER BY ASC, DESC, LIMIT top-3, DISTINCT city, multi-column tie-breaker) — authoring-guide
 - [ ] M8.3 ✍️ Author Lesson 06 CASE/Conditional: prose + exercises — authoring-guide
 - [ ] M8.4 ✍️🔧 Run the authoring "done" checklist for lessons 04, 05, and 06
 
