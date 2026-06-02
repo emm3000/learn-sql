@@ -20,6 +20,17 @@
 import { PGlite } from '@electric-sql/pglite';
 import { worker } from '@electric-sql/pglite/worker';
 
+// PGlite's bundled Emscripten glue probes Node globals (process.versions.node,
+// process.platform, process.argv) to detect its runtime. In a browser Web
+// Worker `process` is absent, so these unguarded reads throw
+// "process is not defined" — but ONLY in the production build: Vite's dev
+// server injects a `process` shim, which is why `pnpm dev` (and the dev-server
+// e2e test) never surfaced this. Define a minimal browser-shaped shim. Leaving
+// `versions.node` undefined keeps Emscripten on its browser code path; the
+// empty `platform`/`argv` fields stop the unguarded reads from throwing.
+const globalScope = globalThis as typeof globalThis & { process?: unknown };
+globalScope.process ??= { env: {}, platform: '', argv: [] };
+
 worker({
   async init() {
     return new PGlite();
