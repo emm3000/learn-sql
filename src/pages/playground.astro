@@ -1,0 +1,62 @@
+---
+import Playground from '../components/Playground.svelte';
+import { lesson01Exercises } from '../lib/exercises/lesson-01.ts';
+import seedSql from '../../seed/classic_company.sql?raw';
+
+const exercise = lesson01Exercises[0];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SQL Playground — Postgres Playground</title>
+  </head>
+  <body>
+    <header>
+      <h1>SQL Playground</h1>
+      <p>
+        Write SQL against a real PostgreSQL database running in your browser.
+      </p>
+    </header>
+    <main>
+      <Playground seedSql={seedSql} exercise={exercise} client:only="svelte" />
+    </main>
+  </body>
+</html>
+
+<style>
+  body {
+    font-family: system-ui, sans-serif;
+    margin: 0;
+    padding: 24px;
+    background: #f9fafb;
+    color: #111827;
+  }
+
+  header {
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    color: #111827;
+  }
+
+  header p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 15px;
+  }
+
+  main {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 960px;
+  }
+</style>

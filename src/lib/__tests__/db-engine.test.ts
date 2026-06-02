@@ -41,7 +41,9 @@ describe('M1 — PGlite engine', () => {
     });
 
     it('returns correct field descriptors', async () => {
-      const res = await db.query('SELECT name, location FROM departments LIMIT 1');
+      const res = await db.query(
+        'SELECT name, location FROM departments LIMIT 1',
+      );
 
       expect(res.fields).toHaveLength(2);
       expect(res.fields[0]).toMatchObject({ name: 'name' });
@@ -51,7 +53,11 @@ describe('M1 — PGlite engine', () => {
     });
 
     it('returns seeded employees with correct column shape', async () => {
-      const res = await db.query<{ first_name: string; last_name: string; job_title: string }>(
+      const res = await db.query<{
+        first_name: string;
+        last_name: string;
+        job_title: string;
+      }>(
         'SELECT first_name, last_name, job_title FROM employees ORDER BY id LIMIT 1',
       );
 
@@ -110,7 +116,9 @@ describe('M1 — PGlite engine', () => {
   describe('Reset (M1.4)', () => {
     it('DROP SCHEMA + reseed restores the original row count', async () => {
       // Confirm pre-reset state: customers has 4 seeded rows + 1 inserted above
-      const before = await db.query<{ count: string }>('SELECT COUNT(*) as count FROM customers');
+      const before = await db.query<{ count: string }>(
+        'SELECT COUNT(*) as count FROM customers',
+      );
       expect(Number(before.rows[0].count)).toBe(5);
 
       // Simulate DbClient.reset
@@ -118,7 +126,9 @@ describe('M1 — PGlite engine', () => {
       await db.exec(seedSql);
 
       // After reset: back to the 4 seeded rows
-      const after = await db.query<{ count: string }>('SELECT COUNT(*) as count FROM customers');
+      const after = await db.query<{ count: string }>(
+        'SELECT COUNT(*) as count FROM customers',
+      );
       expect(Number(after.rows[0].count)).toBe(4);
     });
 

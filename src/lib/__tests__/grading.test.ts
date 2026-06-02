@@ -61,14 +61,13 @@ function makePGliteRunner(db: PGlite): SqlRunner {
 // Helpers — build minimal QueryResult fixtures
 // ---------------------------------------------------------------------------
 
-function makeResult(
-  names: string[],
-  rows: unknown[][],
-): QueryResult {
+function makeResult(names: string[], rows: unknown[][]): QueryResult {
   const fields = names.map((name) => ({ name, dataTypeID: 0 }));
   const resultRows = rows.map((vals) => {
     const row: Record<string, unknown> = {};
-    names.forEach((n, i) => { row[n] = vals[i]; });
+    names.forEach((n, i) => {
+      row[n] = vals[i];
+    });
     return row;
   });
   return { fields, rows: resultRows };
@@ -120,14 +119,21 @@ describe('compareResultSets — pure unit', () => {
   it('checkColumnNames:false ignores name mismatch', () => {
     const actual = makeResult(['alias_a'], [[1]]);
     const expected = makeResult(['real_a'], [[1]]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, checkColumnNames: false }))
-      .toEqual({ passed: true });
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        checkColumnNames: false,
+      }),
+    ).toEqual({ passed: true });
   });
 
   it('checkColumnNames:true fails on name mismatch', () => {
     const actual = makeResult(['alias_a'], [[1]]);
     const expected = makeResult(['real_a'], [[1]]);
-    const result = compareResultSets(actual, expected, { ...baseOptions, checkColumnNames: true });
+    const result = compareResultSets(actual, expected, {
+      ...baseOptions,
+      checkColumnNames: true,
+    });
     expect(result.passed).toBe(false);
     if (!result.passed) {
       expect(result.message).toMatch(/alias_a/);
@@ -138,8 +144,12 @@ describe('compareResultSets — pure unit', () => {
   it('checkColumnNames:true passes when names match', () => {
     const actual = makeResult(['name'], [['Alice']]);
     const expected = makeResult(['name'], [['Alice']]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, checkColumnNames: true }))
-      .toEqual({ passed: true });
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        checkColumnNames: true,
+      }),
+    ).toEqual({ passed: true });
   });
 
   // ---- Row count mismatch ----------------------------------------------
@@ -159,21 +169,44 @@ describe('compareResultSets — pure unit', () => {
   it('orderMatters:false passes when rows match in different order', () => {
     const actual = makeResult(['id'], [[2], [1], [3]]);
     const expected = makeResult(['id'], [[1], [2], [3]]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, orderMatters: false }))
-      .toEqual({ passed: true });
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        orderMatters: false,
+      }),
+    ).toEqual({ passed: true });
   });
 
   it('orderMatters:false passes with multiple columns in different order', () => {
-    const actual = makeResult(['a', 'b'], [[2, 'x'], [1, 'y']]);
-    const expected = makeResult(['a', 'b'], [[1, 'y'], [2, 'x']]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, orderMatters: false }))
-      .toEqual({ passed: true });
+    const actual = makeResult(
+      ['a', 'b'],
+      [
+        [2, 'x'],
+        [1, 'y'],
+      ],
+    );
+    const expected = makeResult(
+      ['a', 'b'],
+      [
+        [1, 'y'],
+        [2, 'x'],
+      ],
+    );
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        orderMatters: false,
+      }),
+    ).toEqual({ passed: true });
   });
 
   it('orderMatters:false detects missing rows (multiset)', () => {
     const actual = makeResult(['id'], [[1], [2]]);
     const expected = makeResult(['id'], [[1], [3]]);
-    const result = compareResultSets(actual, expected, { ...baseOptions, orderMatters: false });
+    const result = compareResultSets(actual, expected, {
+      ...baseOptions,
+      orderMatters: false,
+    });
     expect(result.passed).toBe(false);
     if (!result.passed) {
       expect(result.detail?.kind).toBe('multiset-mismatch');
@@ -185,15 +218,22 @@ describe('compareResultSets — pure unit', () => {
   it('two identical rows ≠ one row (multiset preserves duplicates)', () => {
     const actual = makeResult(['id'], [[1]]);
     const expected = makeResult(['id'], [[1], [1]]);
-    const result = compareResultSets(actual, expected, { ...baseOptions, orderMatters: false });
+    const result = compareResultSets(actual, expected, {
+      ...baseOptions,
+      orderMatters: false,
+    });
     expect(result.passed).toBe(false);
   });
 
   it('duplicate rows pass when both sides have the same duplicates', () => {
     const actual = makeResult(['id'], [[5], [5], [3]]);
     const expected = makeResult(['id'], [[5], [5], [3]]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, orderMatters: false }))
-      .toEqual({ passed: true });
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        orderMatters: false,
+      }),
+    ).toEqual({ passed: true });
   });
 
   // ---- orderMatters:true (ordered) -------------------------------------
@@ -201,7 +241,10 @@ describe('compareResultSets — pure unit', () => {
   it('orderMatters:true fails when row sequence differs', () => {
     const actual = makeResult(['id'], [[2], [1]]);
     const expected = makeResult(['id'], [[1], [2]]);
-    const result = compareResultSets(actual, expected, { ...baseOptions, orderMatters: true });
+    const result = compareResultSets(actual, expected, {
+      ...baseOptions,
+      orderMatters: true,
+    });
     expect(result.passed).toBe(false);
     if (!result.passed) {
       expect(result.detail?.kind).toBe('row-order');
@@ -211,8 +254,12 @@ describe('compareResultSets — pure unit', () => {
   it('orderMatters:true passes when rows match in correct order', () => {
     const actual = makeResult(['id'], [[1], [2], [3]]);
     const expected = makeResult(['id'], [[1], [2], [3]]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, orderMatters: true }))
-      .toEqual({ passed: true });
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        orderMatters: true,
+      }),
+    ).toEqual({ passed: true });
   });
 
   // ---- Numeric tolerance -----------------------------------------------
@@ -222,7 +269,10 @@ describe('compareResultSets — pure unit', () => {
     const actual = makeResult(['avg'], [['3.3333']]);
     const expected = makeResult(['avg'], [['3.334']]);
     expect(
-      compareResultSets(actual, expected, { ...baseOptions, numericTolerance: 0.001 }),
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        numericTolerance: 0.001,
+      }),
     ).toEqual({ passed: true });
   });
 
@@ -249,15 +299,22 @@ describe('compareResultSets — pure unit', () => {
   it('numericTolerance:null passes exact match of numeric-string values', () => {
     const actual = makeResult(['count'], [['4']]);
     const expected = makeResult(['count'], [['4']]);
-    expect(compareResultSets(actual, expected, { ...baseOptions, numericTolerance: null }))
-      .toEqual({ passed: true });
+    expect(
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        numericTolerance: null,
+      }),
+    ).toEqual({ passed: true });
   });
 
   it('tolerance applies to real numbers as well as numeric strings', () => {
     const actual = makeResult(['val'], [[3.3333]]);
     const expected = makeResult(['val'], [[3.334]]);
     expect(
-      compareResultSets(actual, expected, { ...baseOptions, numericTolerance: 0.001 }),
+      compareResultSets(actual, expected, {
+        ...baseOptions,
+        numericTolerance: 0.001,
+      }),
     ).toEqual({ passed: true });
   });
 
@@ -279,7 +336,7 @@ describe('compareResultSets — pure unit', () => {
 
   it('numeric strings of different scale: strict null rejects, tolerance:0 accepts', () => {
     // Simulates PGlite returning AVG/numeric as a scaled string.
-    const actual   = makeResult(['avg'], [['2.50']]);
+    const actual = makeResult(['avg'], [['2.50']]);
     const expected = makeResult(['avg'], [['2.5']]);
 
     // With null tolerance "2.50" !== "2.5" → false negative (documents the trap).
@@ -303,7 +360,7 @@ describe('compareResultSets — pure unit', () => {
 
   it('tolerance coerces numeric-looking string codes — do not set tolerance on code columns', () => {
     // "007" and "7" differ as strings but are equal after Number() coercion.
-    const actual   = makeResult(['code'], [['007']]);
+    const actual = makeResult(['code'], [['007']]);
     const expected = makeResult(['code'], [['7']]);
 
     // tolerance:0 causes "007" and "7" to match — a false positive for code columns.
@@ -354,9 +411,18 @@ describe('gradeExercise — integration (PGlite)', () => {
       prompt: 'List all customers.',
       expectedSql: 'SELECT first_name, last_name, email FROM customers;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: false, checkColumnNames: false, numericTolerance: null },
+      compareOptions: {
+        orderMatters: false,
+        checkColumnNames: false,
+        numericTolerance: null,
+      },
     };
-    const result = await gradeExercise(runner, exercise, exercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      exercise,
+      exercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 
@@ -364,11 +430,21 @@ describe('gradeExercise — integration (PGlite)', () => {
     const exercise: Exercise = {
       id: 'l01-e02',
       prompt: 'List customers ordered by last name.',
-      expectedSql: 'SELECT first_name, last_name FROM customers ORDER BY last_name ASC;',
+      expectedSql:
+        'SELECT first_name, last_name FROM customers ORDER BY last_name ASC;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: true, checkColumnNames: false, numericTolerance: null },
+      compareOptions: {
+        orderMatters: true,
+        checkColumnNames: false,
+        numericTolerance: null,
+      },
     };
-    const result = await gradeExercise(runner, exercise, exercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      exercise,
+      exercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 
@@ -380,9 +456,18 @@ describe('gradeExercise — integration (PGlite)', () => {
       prompt: 'Test error handling.',
       expectedSql: 'SELECT * FROM customers;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: false, checkColumnNames: false, numericTolerance: null },
+      compareOptions: {
+        orderMatters: false,
+        checkColumnNames: false,
+        numericTolerance: null,
+      },
     };
-    const result = await gradeExercise(runner, exercise, 'NOT VALID SQL !!!', seedSql);
+    const result = await gradeExercise(
+      runner,
+      exercise,
+      'NOT VALID SQL !!!',
+      seedSql,
+    );
     expect(result.passed).toBe(false);
     if (!result.passed) {
       expect(typeof result.message).toBe('string');
@@ -397,9 +482,18 @@ describe('gradeExercise — integration (PGlite)', () => {
       prompt: 'Test missing table.',
       expectedSql: 'SELECT * FROM customers LIMIT 1;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: false, checkColumnNames: false, numericTolerance: null },
+      compareOptions: {
+        orderMatters: false,
+        checkColumnNames: false,
+        numericTolerance: null,
+      },
     };
-    const result = await gradeExercise(runner, exercise, 'SELECT * FROM no_such_table;', seedSql);
+    const result = await gradeExercise(
+      runner,
+      exercise,
+      'SELECT * FROM no_such_table;',
+      seedSql,
+    );
     expect(result.passed).toBe(false);
     if (!result.passed) {
       expect(result.message).toMatch(/error/i);
@@ -414,10 +508,15 @@ describe('gradeExercise — integration (PGlite)', () => {
       prompt: 'Select first names.',
       expectedSql: 'SELECT first_name FROM customers ORDER BY id;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: true, checkColumnNames: false, numericTolerance: null },
+      compareOptions: {
+        orderMatters: true,
+        checkColumnNames: false,
+        numericTolerance: null,
+      },
     };
     // Learner uses an alias — same values, different column name.
-    const learnerSql = 'SELECT first_name AS nombre FROM customers ORDER BY id;';
+    const learnerSql =
+      'SELECT first_name AS nombre FROM customers ORDER BY id;';
     const result = await gradeExercise(runner, exercise, learnerSql, seedSql);
     expect(result.passed).toBe(true);
   });
@@ -428,9 +527,14 @@ describe('gradeExercise — integration (PGlite)', () => {
       prompt: 'Select first names (strict names).',
       expectedSql: 'SELECT first_name FROM customers ORDER BY id;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: true, checkColumnNames: true, numericTolerance: null },
+      compareOptions: {
+        orderMatters: true,
+        checkColumnNames: true,
+        numericTolerance: null,
+      },
     };
-    const learnerSql = 'SELECT first_name AS nombre FROM customers ORDER BY id;';
+    const learnerSql =
+      'SELECT first_name AS nombre FROM customers ORDER BY id;';
     const result = await gradeExercise(runner, exercise, learnerSql, seedSql);
     expect(result.passed).toBe(false);
     if (!result.passed) {
@@ -446,9 +550,18 @@ describe('gradeExercise — integration (PGlite)', () => {
       prompt: 'Count customers.',
       expectedSql: 'SELECT COUNT(*) AS total FROM customers;',
       gradeMode: 'result',
-      compareOptions: { orderMatters: false, checkColumnNames: false, numericTolerance: 0 },
+      compareOptions: {
+        orderMatters: false,
+        checkColumnNames: false,
+        numericTolerance: 0,
+      },
     };
-    const result = await gradeExercise(runner, exercise, exercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      exercise,
+      exercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 
@@ -464,25 +577,44 @@ describe('gradeExercise — integration (PGlite)', () => {
       FROM customers
       WHERE email = 'test.runner@example.com'
       ORDER BY id;`,
-    compareOptions: { orderMatters: false, checkColumnNames: false, numericTolerance: null },
+    compareOptions: {
+      orderMatters: false,
+      checkColumnNames: false,
+      numericTolerance: null,
+    },
   };
 
   it('state-based: correct INSERT passes', async () => {
-    const result = await gradeExercise(runner, stateExercise, stateExercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      stateExercise,
+      stateExercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 
   it('state-based: wrong INSERT (different email) fails', async () => {
     const learnerSql = `INSERT INTO customers (first_name, last_name, email, city)
       VALUES ('Test', 'Runner', 'wrong.email@example.com', 'TestCity');`;
-    const result = await gradeExercise(runner, stateExercise, learnerSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      stateExercise,
+      learnerSql,
+      seedSql,
+    );
     expect(result.passed).toBe(false);
   });
 
   it('state-based: no mutation fails (verification returns 0 rows)', async () => {
     // Learner runs a SELECT instead of INSERT — verification finds nothing.
     const learnerSql = 'SELECT 1;';
-    const result = await gradeExercise(runner, stateExercise, learnerSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      stateExercise,
+      learnerSql,
+      seedSql,
+    );
     expect(result.passed).toBe(false);
   });
 
@@ -493,7 +625,12 @@ describe('gradeExercise — integration (PGlite)', () => {
     await gradeExercise(runner, stateExercise, dirty, seedSql);
 
     // Second: correct mutation. Must pass — the previous run's data is gone.
-    const result = await gradeExercise(runner, stateExercise, stateExercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      stateExercise,
+      stateExercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 
@@ -504,17 +641,31 @@ describe('gradeExercise — integration (PGlite)', () => {
     expectedSql: `UPDATE departments SET location = 'Medellin' WHERE name = 'Engineering';`,
     gradeMode: 'state',
     verificationSql: `SELECT name, location FROM departments WHERE name = 'Engineering';`,
-    compareOptions: { orderMatters: false, checkColumnNames: false, numericTolerance: null },
+    compareOptions: {
+      orderMatters: false,
+      checkColumnNames: false,
+      numericTolerance: null,
+    },
   };
 
   it('state-based: correct UPDATE passes', async () => {
-    const result = await gradeExercise(runner, updateExercise, updateExercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      updateExercise,
+      updateExercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 
   it('state-based: wrong UPDATE (different value) fails', async () => {
     const learnerSql = `UPDATE departments SET location = 'Caracas' WHERE name = 'Engineering';`;
-    const result = await gradeExercise(runner, updateExercise, learnerSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      updateExercise,
+      learnerSql,
+      seedSql,
+    );
     expect(result.passed).toBe(false);
   });
 
@@ -524,7 +675,12 @@ describe('gradeExercise — integration (PGlite)', () => {
     await gradeExercise(runner, updateExercise, dirty, seedSql);
 
     // After isolation: correct run should pass from clean seed.
-    const result = await gradeExercise(runner, updateExercise, updateExercise.expectedSql, seedSql);
+    const result = await gradeExercise(
+      runner,
+      updateExercise,
+      updateExercise.expectedSql,
+      seedSql,
+    );
     expect(result.passed).toBe(true);
   });
 });

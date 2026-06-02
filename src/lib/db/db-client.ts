@@ -84,4 +84,3 @@ export class DbClient {
     this.#worker.terminate();
   }
 }
-

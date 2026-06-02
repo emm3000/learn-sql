@@ -1,8 +1,8 @@
 ---
-title: "Introduction to SELECT"
-description: "Learn how to read data from a PostgreSQL table using SELECT."
+title: 'Introduction to SELECT'
+description: 'Learn how to read data from a PostgreSQL table using SELECT.'
 order: 1
-belt: "beginner"
+belt: 'beginner'
 draft: false
 ---
 

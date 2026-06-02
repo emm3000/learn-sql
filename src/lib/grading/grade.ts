@@ -73,7 +73,10 @@ async function gradeResult(
     return {
       passed: false,
       message: `Your query produced an error: ${learnerResult.error.message}`,
-      detail: { kind: 'query-error', errorMessage: learnerResult.error.message },
+      detail: {
+        kind: 'query-error',
+        errorMessage: learnerResult.error.message,
+      },
     };
   }
 
@@ -84,7 +87,10 @@ async function gradeResult(
     return {
       passed: false,
       message: `The reference solution produced an error: ${expectedResult.error.message}`,
-      detail: { kind: 'query-error', errorMessage: expectedResult.error.message },
+      detail: {
+        kind: 'query-error',
+        errorMessage: expectedResult.error.message,
+      },
     };
   }
 
@@ -119,7 +125,8 @@ async function gradeState(
   if (!exercise.verificationSql) {
     return {
       passed: false,
-      message: 'This exercise is missing a verification query (authoring error).',
+      message:
+        'This exercise is missing a verification query (authoring error).',
       detail: { kind: 'missing-verification-sql' },
     };
   }
@@ -132,7 +139,10 @@ async function gradeState(
     return {
       passed: false,
       message: `Your query produced an error: ${learnerMutation.error.message}`,
-      detail: { kind: 'query-error', errorMessage: learnerMutation.error.message },
+      detail: {
+        kind: 'query-error',
+        errorMessage: learnerMutation.error.message,
+      },
     };
   }
   const learnerVerification = await runner.runSql(verificationSql);
@@ -140,7 +150,10 @@ async function gradeState(
     return {
       passed: false,
       message: `The verification query failed after your statement: ${learnerVerification.error.message}`,
-      detail: { kind: 'query-error', errorMessage: learnerVerification.error.message },
+      detail: {
+        kind: 'query-error',
+        errorMessage: learnerVerification.error.message,
+      },
     };
   }
 
@@ -159,7 +172,10 @@ async function gradeState(
     return {
       passed: false,
       message: `The verification query failed after the reference solution: ${refVerification.error.message}`,
-      detail: { kind: 'query-error', errorMessage: refVerification.error.message },
+      detail: {
+        kind: 'query-error',
+        errorMessage: refVerification.error.message,
+      },
     };
   }
 

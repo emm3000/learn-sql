@@ -19,35 +19,37 @@ const compareOptionsSchema = z.object({
   numericTolerance: z.number().nonnegative().nullable(),
 });
 
-export const exerciseSchema = z.object({
-  /** Stable, unique identifier for this exercise across all lessons. */
-  id: z.string().min(1),
-  /** The task description shown to the learner — one concept, beginner voice. */
-  prompt: z.string().min(1),
-  /** Optional SQL pre-filled in the editor when the learner opens the exercise. */
-  starterSql: z.string().optional(),
-  /**
-   * The reference solution SQL. Required for all exercises.
-   * For gradeMode 'result': run against the DB and compare rows to the learner's output.
-   * For gradeMode 'state': run as the reference mutation; verificationSql then reads
-   * the resulting state, which is compared to the learner's state.
-   */
-  expectedSql: z.string().min(1),
-  /**
-   * 'result' — for reads (SELECT). Grader compares row sets.
-   * 'state'  — for mutations (INSERT/UPDATE/DELETE). Grader compares DB state after.
-   */
-  gradeMode: z.enum(['result', 'state']),
-  /**
-   * SQL query that reads the relevant state after a mutation.
-   * Required when gradeMode is 'state'.
-   */
-  verificationSql: z.string().optional(),
-  compareOptions: compareOptionsSchema,
-}).refine(
-  (ex) => ex.gradeMode !== 'state' || ex.verificationSql !== undefined,
-  { message: "verificationSql is required when gradeMode is 'state'" },
-);
+export const exerciseSchema = z
+  .object({
+    /** Stable, unique identifier for this exercise across all lessons. */
+    id: z.string().min(1),
+    /** The task description shown to the learner — one concept, beginner voice. */
+    prompt: z.string().min(1),
+    /** Optional SQL pre-filled in the editor when the learner opens the exercise. */
+    starterSql: z.string().optional(),
+    /**
+     * The reference solution SQL. Required for all exercises.
+     * For gradeMode 'result': run against the DB and compare rows to the learner's output.
+     * For gradeMode 'state': run as the reference mutation; verificationSql then reads
+     * the resulting state, which is compared to the learner's state.
+     */
+    expectedSql: z.string().min(1),
+    /**
+     * 'result' — for reads (SELECT). Grader compares row sets.
+     * 'state'  — for mutations (INSERT/UPDATE/DELETE). Grader compares DB state after.
+     */
+    gradeMode: z.enum(['result', 'state']),
+    /**
+     * SQL query that reads the relevant state after a mutation.
+     * Required when gradeMode is 'state'.
+     */
+    verificationSql: z.string().optional(),
+    compareOptions: compareOptionsSchema,
+  })
+  .refine(
+    (ex) => ex.gradeMode !== 'state' || ex.verificationSql !== undefined,
+    { message: "verificationSql is required when gradeMode is 'state'" },
+  );
 
 /** Inferred TypeScript type for a single exercise. */
 export type Exercise = z.infer<typeof exerciseSchema>;

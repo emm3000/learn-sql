@@ -13,7 +13,12 @@ export type GradeResult =
 export type GradeDetail =
   | { kind: 'column-count'; actualCount: number; expectedCount: number }
   | { kind: 'column-names'; actual: string[]; expected: string[] }
-  | { kind: 'row-order'; index: number; actualRow: unknown[]; expectedRow: unknown[] }
+  | {
+      kind: 'row-order';
+      index: number;
+      actualRow: unknown[];
+      expectedRow: unknown[];
+    }
   | { kind: 'multiset-mismatch'; missing: unknown[][]; extra: unknown[][] }
   | { kind: 'query-error'; errorMessage: string }
   | { kind: 'missing-verification-sql' };

@@ -24,7 +24,8 @@ describe('exerciseSchema', () => {
       prompt: 'Insert a new customer.',
       expectedSql: "INSERT INTO customers (first_name) VALUES ('Test');",
       gradeMode: 'state',
-      verificationSql: 'SELECT first_name FROM customers ORDER BY id DESC LIMIT 1;',
+      verificationSql:
+        'SELECT first_name FROM customers ORDER BY id DESC LIMIT 1;',
       compareOptions: {
         orderMatters: false,
         checkColumnNames: false,
@@ -52,7 +53,9 @@ describe('exerciseSchema', () => {
   it('validates all lesson 01 exercises', () => {
     for (const exercise of lesson01Exercises) {
       const result = exerciseSchema.safeParse(exercise);
-      expect(result.success, `Exercise ${exercise.id} failed validation`).toBe(true);
+      expect(result.success, `Exercise ${exercise.id} failed validation`).toBe(
+        true,
+      );
     }
   });
 });

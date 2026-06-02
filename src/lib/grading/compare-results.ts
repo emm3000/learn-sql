@@ -59,7 +59,11 @@ function isNumeric(v: unknown): v is number | string {
  * Compare two individual values, applying numericTolerance when both sides
  * are numeric (including numeric-string). Falls back to strict equality.
  */
-function valuesEqual(a: unknown, b: unknown, tolerance: number | null): boolean {
+function valuesEqual(
+  a: unknown,
+  b: unknown,
+  tolerance: number | null,
+): boolean {
   if (tolerance !== null && isNumeric(a) && isNumeric(b)) {
     return Math.abs(Number(a) - Number(b)) <= tolerance;
   }
@@ -70,7 +74,11 @@ function valuesEqual(a: unknown, b: unknown, tolerance: number | null): boolean 
 /**
  * Compare two value arrays element-by-element.
  */
-function rowValuesEqual(a: unknown[], b: unknown[], tolerance: number | null): boolean {
+function rowValuesEqual(
+  a: unknown[],
+  b: unknown[],
+  tolerance: number | null,
+): boolean {
   if (a.length !== b.length) return false;
   return a.every((v, i) => valuesEqual(v, b[i], tolerance));
 }
@@ -136,7 +144,11 @@ export function compareResultSets(
           `Got: [${actualNames.join(', ')}] — ` +
           `expected: [${expectedNames.join(', ')}]. ` +
           `Check your column aliases.`,
-        detail: { kind: 'column-names', actual: actualNames, expected: expectedNames },
+        detail: {
+          kind: 'column-names',
+          actual: actualNames,
+          expected: expectedNames,
+        },
       };
     }
   }
@@ -145,7 +157,9 @@ export function compareResultSets(
   // 3. Extract value arrays (positional, by fields[] order)
   // ------------------------------------------------------------------
   const actualRows = actual.rows.map((r) => rowToValueArray(r, actual.fields));
-  const expectedRows = expected.rows.map((r) => rowToValueArray(r, expected.fields));
+  const expectedRows = expected.rows.map((r) =>
+    rowToValueArray(r, expected.fields),
+  );
 
   // ------------------------------------------------------------------
   // 4. Row count shortcut — always fail early on count mismatch
