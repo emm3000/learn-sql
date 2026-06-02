@@ -52,3 +52,4 @@ docker compose down -v
 - [Leccion 01: SELECT](./lessons/01-select/README.md)
 - [Leccion 02: INSERT](./lessons/02-insert/README.md)
 - [Leccion 03: UPDATE y DELETE](./lessons/03-update-delete/README.md)
+- [Leccion 04: Filtros, DISTINCT y NULL](./lessons/04-filtros-distinct-null/README.md)
