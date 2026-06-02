@@ -24,3 +24,20 @@ No exactamente. Un CTE es una construccion de la consulta. En algunos casos se c
 
 Si. Cuando los reportes se vuelven largos, `WITH` ayuda mucho a separar logica y a revisar cada paso.
 
+## Duda 5
+
+**Esto se usa mucho en proyectos reales**
+
+Si, sobre todo en reportes, analitica, consultas de negocio y pipelines de lectura donde quieres claridad y pasos intermedios bien nombrados.
+
+## Duda 6
+
+**Hay alternativas mejores a veces**
+
+Si. A veces una vista, una consulta mas simple o incluso una tabla agregada puede ser mejor si el reporte se repite mucho o si el costo de recalcularlo es alto.
+
+## Duda 7
+
+**Puede afectar performance**
+
+Si, dependiendo del tamano de los datos y de como el planner optimize la consulta. En tablas grandes, conviene revisar el plan y no asumir que dividir la query siempre la vuelve mas rapida.

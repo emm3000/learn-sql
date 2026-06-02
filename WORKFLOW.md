@@ -37,6 +37,17 @@ Este repositorio esta pensado para avanzar en temas pequenos, claros y versionad
 - `dudas_y_aclaraciones.md`
 - `resumen.md`
 
+## Enfoque obligatorio por leccion
+
+Cada leccion debe responder, ademas de la sintaxis:
+
+- si esto se usa en proyectos reales
+- en que casos se usa mucho y en cuales no tanto
+- que costo de performance puede tener
+- que alternativa puede ser mejor si el problema cambia
+- que riesgos o limites aparecen en bases grandes
+- como se ve esto en una app real o en un dashboard real
+
 ## Enfoque de `dudas_y_aclaraciones`
 
 Esta seccion no debe quedarse en definiciones secas.
