@@ -5,6 +5,7 @@ import { lesson03Exercises } from './lesson-03.ts';
 import { lesson04Exercises } from './lesson-04.ts';
 import { lesson05Exercises } from './lesson-05.ts';
 import { lesson06Exercises } from './lesson-06.ts';
+import { lesson07Exercises } from './lesson-07.ts';
 
 /**
  * Map from lesson slug to its exercises.
@@ -17,4 +18,5 @@ export const exercisesByLesson: Record<string, Exercise[]> = {
   '04-filtering': lesson04Exercises,
   '05-sorting': lesson05Exercises,
   '06-conditional': lesson06Exercises,
+  '07-inner-join': lesson07Exercises,
 };

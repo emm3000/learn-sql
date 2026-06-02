@@ -38,7 +38,7 @@ export const belts: Belt[] = [
     name: 'Intermediate',
     subtitle: 'Answer questions with data',
     color: '#2563eb',
-    status: 'coming-soon',
+    status: 'active',
   },
   {
     id: 'advanced',

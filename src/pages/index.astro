@@ -6,17 +6,27 @@ import BeltLessons from '../components/BeltLessons.svelte';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_NAME } from '../lib/site.ts';
 
-// Load non-draft lessons for the active (beginner) belt, sorted by order.
+// Build a per-belt lesson lookup: group all non-draft lessons by belt,
+// sorted by per-belt order (each belt's order starts at 1 independently).
 const allLessons = await getCollection('lessons', ({ data }) => !data.draft);
-const beginnerLessons = allLessons
-  .filter((entry) => entry.data.belt === 'beginner')
-  .sort((a, b) => a.data.order - b.data.order)
-  .map((entry) => ({
-    slug: entry.id,
-    title: entry.data.title,
-    order: entry.data.order,
-    exerciseCount: exercisesByLesson[entry.id]?.length ?? 0,
-  }));
+const lessonsByBelt = allLessons.reduce<Record<string, { slug: string; title: string; order: number; exerciseCount: number }[]>>(
+  (acc, entry) => {
+    const beltId = entry.data.belt;
+    if (!acc[beltId]) acc[beltId] = [];
+    acc[beltId].push({
+      slug: entry.id,
+      title: entry.data.title,
+      order: entry.data.order,
+      exerciseCount: exercisesByLesson[entry.id]?.length ?? 0,
+    });
+    return acc;
+  },
+  {},
+);
+// Sort each belt's lessons by their per-belt order.
+for (const beltId of Object.keys(lessonsByBelt)) {
+  lessonsByBelt[beltId].sort((a, b) => a.order - b.order);
+}
 ---
 
 <BaseLayout
@@ -53,7 +63,7 @@ const beginnerLessons = allLessons
 
               {belt.status === 'active' && (
                 <div class="belt-lessons">
-                  <BeltLessons lessons={beginnerLessons} client:load />
+                  <BeltLessons lessons={lessonsByBelt[belt.id] ?? []} client:load />
                 </div>
               )}
             </li>

@@ -201,6 +201,25 @@ are authored, auto-graded, and passing.
 
 ---
 
+## M9 — Intermediate belt kickoff (Fase 3 — JOINs) ✍️
+
+Goal: open the Intermediate belt with Lesson 07 INNER JOIN — the first lesson
+that teaches combining related tables.
+
+- [x] M9.1 ✍️ Author Lesson 07 INNER JOIN: prose (Theory, Try it, Real-world note,
+      Summary) + 5 result-based exercises (basic 2-table JOIN, JOIN + WHERE filter,
+      JOIN with numeric column, 3-table chained JOIN, self-join) — authoring-guide
+- [x] M9.2 🔧 Unlock Intermediate belt: flip `status: 'coming-soon'` →
+      `status: 'active'` in `src/lib/belts.ts`
+- [x] M9.3 🔧 Generalize `src/pages/index.astro`: build a per-belt lesson lookup
+      (`lessonsByBelt`) so every active belt renders its own sorted lesson list;
+      beginner card still shows lessons 01–06, intermediate card shows lesson 07
+
+Definition of done: `pnpm build` and `pnpm test` pass; all 5 lesson-07 exercises
+self-grade correctly; the landing page shows both active belts with their lessons.
+
+---
+
 ## Open decisions (unblock as needed)
 
 These are PRD open questions. They block specific tasks; resolve before that task runs.
