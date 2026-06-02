@@ -43,6 +43,7 @@ This project is built doc-first, on purpose. Read in this order:
 3. `docs/tasks.md` — the work breakdown (milestones M0–M7, traceable to PRD/ADRs).
 4. `docs/mindset.md` — teaching and product philosophy (the voice).
 5. `docs/authoring-guide.md` — how to write lessons and graded exercises.
+6. `docs/orchestration.md` — how to delegate to agents and verify their work.
 
 IMPORTANT: Do not change architecture without reading the relevant ADR. A new
 significant decision means a new ADR — see `docs/adr/README.md` for the format.
