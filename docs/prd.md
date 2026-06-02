@@ -303,13 +303,16 @@ Each lesson renders:
 
 ## 14. Open questions
 
-- Q1. Product name. `[OPEN]`
-- Q2. Analytics tool. `[OPEN]`
-- Q3. Deploy target (Vercel / Netlify / Cloudflare Pages / GitHub Pages). `[OPEN]`
-- Q4. Concrete numeric targets for NFR-4 and the success metrics. `[OPEN]`
+- Q1. Product name. `[DEFERRED]` — placeholder "Postgres Playground" until M7.1.
 
 ### Resolved
 
+- Q2. Analytics tool → Cloudflare Web Analytics (cookieless, free, zero-config; pairs
+  with Cloudflare Pages). NFR-11.
+- Q3. Deploy target → Cloudflare Pages (static, global CDN; PGlite confirmed to run
+  without cross-origin isolation, so no special headers required).
+- Q4. Numeric targets → time-to-first-runnable-query < ~3s on broadband + Lighthouse
+  Performance ≥ 90; success-metric percentages set post-launch from a baseline.
 - Belt names: Beginner / Intermediate / Advanced / Ninja / Insane.
 - MVP lessons: 01-SELECT, 02-INSERT, 03-UPDATE/DELETE.
 - Progression: soft gating (recommended order, free navigation).

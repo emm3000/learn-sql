@@ -33,3 +33,4 @@ Each record follows a lightweight MADR / Nygard structure:
 | [0007](0007-svelte-interactive-island.md)      | Svelte for the interactive island        | Accepted |
 | [0008](0008-codemirror-sql-editor.md)          | CodeMirror 6 for the SQL editor          | Accepted |
 | [0009](0009-typed-exercise-definitions.md)     | Typed TS + Zod exercise definitions      | Accepted |
+| [0010](0010-cloudflare-pages-deploy.md)        | Deploy to Cloudflare Pages + Analytics   | Accepted |

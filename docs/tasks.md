@@ -170,7 +170,7 @@ PRD success metrics; the e2e smoke test passes in CI before deploy.
 
 These are PRD open questions. They block specific tasks; resolve before that task runs.
 
-- [ ] Product name — blocks branding/meta (M7.1). PRD Q1
-- [ ] Analytics tool — blocks M7.6. PRD Q2
-- [ ] Deploy target (Vercel / Netlify / Cloudflare Pages / GitHub Pages) — blocks M7.7. PRD Q3
-- [ ] Numeric targets for NFR-4 and the success metrics — blocks M7.3 acceptance. PRD Q4
+- [ ] Product name — DEFERRED; placeholder "Postgres Playground" until M7.1. PRD Q1
+- [x] Analytics tool → Cloudflare Web Analytics (cookieless). M7.6. PRD Q2
+- [x] Deploy target → Cloudflare Pages. M7.7. PRD Q3
+- [x] Numeric targets → time-to-first-query < ~3s + Lighthouse Perf ≥ 90; success-% post-launch. M7.3. PRD Q4
