@@ -1,0 +1,8 @@
+# Cloudflare Pages headers — https://developers.cloudflare.com/pages/configuration/headers/
+#
+# Files under /_astro/ are content-hashed by Astro (the hash is in the filename),
+# so they are immutable: any content change produces a new filename. Cache them
+# for a year so repeat visits and lesson-to-lesson navigations reuse the ~16 MB
+# PGlite engine (wasm + data) from disk instead of revalidating it every load.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
