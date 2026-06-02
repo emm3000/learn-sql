@@ -25,6 +25,20 @@ WHERE id < 10
 WHERE id <= 10
 ```
 
+## Nota sobre tipos
+
+Los operadores `<`, `>`, `<=` y `>=` se usan muy seguido con numeros, pero tambien pueden aplicar a tipos con orden, como fechas y timestamps.
+
+Ejemplos:
+
+```sql
+WHERE precio > 100
+WHERE created_at >= '2026-06-01'
+WHERE nombre < 'M'
+```
+
+En bases reales, esto importa porque no todo filtro de “mayor o menor” es numerico.
+
 ## Operadores logicos
 
 ```sql
@@ -67,4 +81,3 @@ FROM saludos;
 
 En una base real, filtrar bien es tan importante como leer bien.
 Y con `NULL`, si piensas como si fuera un valor normal, te vas a equivocar.
-
