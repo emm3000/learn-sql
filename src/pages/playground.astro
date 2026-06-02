@@ -21,7 +21,11 @@ const exercise = lesson01Exercises[0];
       </p>
     </header>
     <main>
-      <PlaygroundIsland seedSql={seedSql} exercise={exercise} client:only="svelte" />
+      <PlaygroundIsland
+        seedSql={seedSql}
+        exercise={exercise}
+        client:only="svelte"
+      />
     </main>
   </body>
 </html>
