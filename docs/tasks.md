@@ -177,6 +177,22 @@ PRD success metrics; the e2e smoke test passes in CI before deploy.
 
 ---
 
+## M8 — Beginner belt / Fase 1 complete ✍️ (lessons 04–06)
+
+Goal: extend the Beginner belt with three lessons that complete the filtering and
+sorting fundamentals — the natural next step after INSERT/UPDATE/DELETE.
+
+- [~] M8.1 ✍️ Author Lesson 04 WHERE/Filtering: prose + 5 result-based exercises
+      (text equality, numeric comparison, BETWEEN, IN, IS NULL) — authoring-guide
+- [ ] M8.2 ✍️ Author Lesson 05 ORDER BY/Sorting: prose + exercises — authoring-guide
+- [ ] M8.3 ✍️ Author Lesson 06 CASE/Conditional: prose + exercises — authoring-guide
+- [ ] M8.4 ✍️🔧 Run the authoring "done" checklist for lessons 04, 05, and 06
+
+Definition of done: all three lessons authored and auto-graded; every exercise passes
+when graded against its own `expectedSql`; `pnpm build` and `pnpm test` pass.
+
+---
+
 ## Open decisions (unblock as needed)
 
 These are PRD open questions. They block specific tasks; resolve before that task runs.
