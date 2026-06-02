@@ -66,14 +66,14 @@ correct results, and reset back to seed — all in a worker, with the UI thread 
 Goal: objective auto-grading for both exercise kinds, with fair comparison. Headless,
 unit-tested — no UI needed yet. ADR-0003.
 
-- [ ] M2.1 Result-set comparison: compare rows + columns honoring `compareOptions`
+- [x] M2.1 Result-set comparison: compare rows + columns honoring `compareOptions`
       (`orderMatters`, `checkColumnNames`, `numericTolerance`) — FR-8
-- [ ] M2.2 Result-based grading: run `expectedSql` and the learner query, compare — FR-6
-- [ ] M2.3 State-based grading: run the learner mutation in an **isolated** DB, run
+- [x] M2.2 Result-based grading: run `expectedSql` and the learner query, compare — FR-6
+- [x] M2.3 State-based grading: run the learner mutation in an **isolated** DB, run
       `verificationSql`, compare to a reference run of `expectedSql` — FR-7
-- [ ] M2.4 Specific failure messages (what differs: missing/extra rows, wrong column,
+- [x] M2.4 Specific failure messages (what differs: missing/extra rows, wrong column,
       wrong order) — FR-6
-- [ ] M2.5 Unit tests for fairness edge cases: row order, column aliases, floats, empty
+- [x] M2.5 Unit tests for fairness edge cases: row order, column aliases, floats, empty
       results, learner query errors
 
 Definition of done: a suite of fixture exercises grades correctly, including deliberate

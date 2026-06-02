@@ -47,8 +47,19 @@ Each exercise is a typed TypeScript object, validated by a Zod schema at build t
   requires `ORDER BY`). Otherwise `false`; do not punish a correct but unordered result.
 - `checkColumnNames` — usually `false` for beginners (an alias difference is not wrong).
   Set `true` only when the exercise is specifically about naming or aliases.
-- `numericTolerance` — set a small tolerance for `AVG`, division, or anything producing
-  floating-point values.
+- `numericTolerance` — PGlite returns `numeric`/`decimal`/`AVG`/division/money values
+  as scaled strings (e.g. `"2.5000000000000000"`, `"2.50"`). With the default
+  `numericTolerance: null` the grader uses strict `===`, so `"2.50"` and `"2.5"` are
+  considered unequal — a silent false negative for a correct learner answer.
+  **Any exercise whose result includes these types MUST set `numericTolerance`:**
+  - Use `0` for exact-value exercises (scale-insensitive match, e.g. `COUNT`, `AVG`
+    where both sides come from the same DB and only string scale differs).
+  - Use a small epsilon (e.g. `0.001`) when floating-point rounding is possible.
+  - `COUNT(*)`, `SUM`, plain `int`, and `bigint` come back as JS `number`, not string,
+    so `null` is fine for pure integer results — but `0` is safe there too.
+  **Never set `numericTolerance` on columns holding numeric-looking string codes**
+  (zip codes, leading-zero IDs, phone numbers): tolerance coerces via `Number()`, so
+  `"007"` and `"7"` become equal, producing a false positive.
 
 ## Writing a good prompt
 
