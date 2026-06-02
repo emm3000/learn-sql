@@ -303,10 +303,12 @@ Each lesson renders:
 
 ## 14. Open questions
 
-- Q1. Product name. `[DEFERRED]` — placeholder "Postgres Playground" until M7.1.
+None — all resolved.
 
 ### Resolved
 
+- Q1. Product name → **pgGym** (short, technical; the `pg` prefix reads to Postgres
+  users). Lives in one place: `src/lib/site.ts`.
 - Q2. Analytics tool → Cloudflare Web Analytics (cookieless, free, zero-config; pairs
   with Cloudflare Pages). NFR-11.
 - Q3. Deploy target → Cloudflare Pages (static, global CDN; PGlite confirmed to run

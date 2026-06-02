@@ -4,6 +4,7 @@ import { belts } from '../lib/belts.ts';
 import { exercisesByLesson } from '../lib/exercises/index.ts';
 import BeltLessons from '../components/BeltLessons.svelte';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_NAME } from '../lib/site.ts';
 
 // Load non-draft lessons for the active (beginner) belt, sorted by order.
 const allLessons = await getCollection('lessons', ({ data }) => !data.draft);
@@ -23,7 +24,7 @@ const beginnerLessons = allLessons
   description="Learn PostgreSQL by writing real SQL — no setup, no account, runs in your browser."
 >
     <header class="site-header">
-      <h1>Postgres Playground</h1>
+      <h1>{SITE_NAME}</h1>
       <p class="site-tagline">
         Learn PostgreSQL by writing real SQL — no setup, no account, runs in
         your browser.

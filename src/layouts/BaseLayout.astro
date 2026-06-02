@@ -1,13 +1,11 @@
 ---
+import { SITE_NAME } from '../lib/site.ts';
+
 interface Props {
   title: string;
   description: string;
   canonical?: string;
 }
-
-// Placeholder product name pending final naming (PRD Q1).
-// This is the ONLY place the product name lives.
-const SITE_NAME = 'Postgres Playground';
 
 const { title, description, canonical } = Astro.props;
 
