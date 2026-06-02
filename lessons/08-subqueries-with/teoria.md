@@ -42,3 +42,6 @@ WHERE total_employees >= 2;
 
 Si una consulta grande empieza a parecer una torre dificil de leer, `WITH` te ayuda a partirla en pasos con nombre.
 
+## Nota sobre el alias
+
+En PostgreSQL moderno, una subquery en `FROM` puede ejecutarse sin alias en algunos casos, pero sigue siendo recomendable ponerlo porque mejora la lectura y evita confusiones. En SQL estandar y en muchos motores, el alias sigue siendo obligatorio.

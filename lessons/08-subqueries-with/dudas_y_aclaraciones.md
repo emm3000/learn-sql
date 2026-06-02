@@ -18,6 +18,12 @@ Cuando la consulta empieza a tener varios pasos y quieres que sea mas facil de l
 
 No exactamente. Un CTE es una construccion de la consulta. En algunos casos se comporta muy parecido a una vista temporal logica, pero no es lo mismo que una tabla creada manualmente.
 
+## Duda 3.1
+
+**Por que a veces veo alias en subqueries y a veces no**
+
+En PostgreSQL moderno, algunas subqueries en `FROM` pueden funcionar sin alias, como viste en tu terminal. Aun asi, usar alias sigue siendo mejor practica porque hace el SQL mas legible y mas portable.
+
 ## Duda 4
 
 **En bases reales esto ayuda de verdad**
