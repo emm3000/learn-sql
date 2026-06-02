@@ -51,3 +51,4 @@ docker compose down -v
 - [Workflow de aprendizaje](./WORKFLOW.md)
 - [Leccion 01: SELECT](./lessons/01-select/README.md)
 - [Leccion 02: INSERT](./lessons/02-insert/README.md)
+- [Leccion 03: UPDATE y DELETE](./lessons/03-update-delete/README.md)
