@@ -177,20 +177,27 @@ PRD success metrics; the e2e smoke test passes in CI before deploy.
 
 ---
 
-## M8 — Beginner belt / Fase 1 complete ✍️ (lessons 04–06)
+## M8 — Beginner belt / Fase 1 complete ✍️ (lessons 04–06) ✅
 
 Goal: extend the Beginner belt with three lessons that complete the filtering and
 sorting fundamentals — the natural next step after INSERT/UPDATE/DELETE.
 
-- [~] M8.1 ✍️ Author Lesson 04 WHERE/Filtering: prose + 5 result-based exercises
+- [x] M8.1 ✍️ Author Lesson 04 WHERE/Filtering: prose + 5 result-based exercises
       (text equality, numeric comparison, BETWEEN, IN, IS NULL) — authoring-guide
-- [~] M8.2 ✍️ Author Lesson 05 ORDER BY/Sorting: prose + 5 result-based exercises
+- [x] M8.2 ✍️ Author Lesson 05 ORDER BY/Sorting: prose + 5 result-based exercises
       (ORDER BY ASC, DESC, LIMIT top-3, DISTINCT city, multi-column tie-breaker) — authoring-guide
-- [ ] M8.3 ✍️ Author Lesson 06 CASE/Conditional: prose + exercises — authoring-guide
-- [ ] M8.4 ✍️🔧 Run the authoring "done" checklist for lessons 04, 05, and 06
+- [x] M8.3 ✍️ Author Lesson 06 CASE/Conditional: prose + 5 result-based exercises
+      (CASE searched form salary band, COALESCE manager default, COALESCE date label,
+      NULLIF sentinel collapse, COALESCE+NULLIF composition) — authoring-guide
+- [x] M8.4 ✍️🔧 Run the authoring "done" checklist for lessons 04, 05, and 06
+      (`pnpm build` and `pnpm test` pass; all 5 lesson-06 exercises self-grade correctly)
 
 Definition of done: all three lessons authored and auto-graded; every exercise passes
 when graded against its own `expectedSql`; `pnpm build` and `pnpm test` pass.
+
+**Beginner belt (Fase 1) is complete.** All six lessons (01 SELECT, 02 INSERT,
+03 UPDATE/DELETE, 04 WHERE/Filtering, 05 ORDER BY/Sorting, 06 CASE/Conditional)
+are authored, auto-graded, and passing.
 
 ---
 
