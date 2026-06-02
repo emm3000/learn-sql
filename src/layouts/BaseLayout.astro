@@ -62,6 +62,13 @@ if (canonical) {
     color: #111827;
   }
 
+  /* Tighten edge padding on phones so content keeps its width (NFR-10). */
+  @media (max-width: 480px) {
+    body {
+      padding: 16px;
+    }
+  }
+
   :focus-visible {
     outline: 2px solid #2563eb;
     outline-offset: 2px;

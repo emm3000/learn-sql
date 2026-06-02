@@ -52,7 +52,7 @@ const beginnerLessons = allLessons
 
               {belt.status === 'active' && (
                 <div class="belt-lessons">
-                  <BeltLessons lessons={beginnerLessons} client:only="svelte" />
+                  <BeltLessons lessons={beginnerLessons} client:load />
                 </div>
               )}
             </li>

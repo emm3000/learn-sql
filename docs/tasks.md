@@ -154,7 +154,8 @@ Goal: ship it as a real public product. NFRs.
       — NFR-6
 - [x] M7.3 Performance: confirm lazy-load and time-to-first-query target — NFR-3, NFR-4
       (e2e gate now runs against the production build via `astro preview`)
-- [ ] M7.4 Responsive: readable on mobile; editor best-effort — NFR-10
+- [x] M7.4 Responsive: readable on mobile; editor best-effort — NFR-10
+      (tightened body padding ≤480px; fixed landing CLS by SSR-rendering the belt list)
 - [x] M7.5 Unsupported-browser message (no WASM / no Web Worker) — NFR-9
 - [ ] M7.6 Cookieless analytics for the success metrics — NFR-11
 - [ ] M7.7 Deploy to the chosen static host
