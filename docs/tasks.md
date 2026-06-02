@@ -161,7 +161,10 @@ Goal: ship it as a real public product. NFRs.
       (Cloudflare Web Analytics beacon, token-gated via PUBLIC_CF_BEACON_TOKEN.
       MVP scope = pageviews + Web Vitals; the behavioral funnel M1–M5 needs custom
       events, which Web Analytics does not support — deferred post-launch)
-- [ ] M7.7 Deploy to the chosen static host
+- [x] M7.7 Deploy to the chosen static host
+      (Cloudflare Pages, Git-connected to emm3000/learn-sql; live at
+      https://learn-sql-amg.pages.dev — verified end-to-end: PGlite boots, grade passes,
+      zero console errors)
 - [x] M7.8 End-to-end smoke test (Playwright): in a real browser, load Lesson 01, run a
       query against PGlite, and assert results render — the safety net proving the M1–M6
       pieces work together. Gates deploy (M7.7).
