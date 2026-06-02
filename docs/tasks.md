@@ -48,13 +48,13 @@ exercise validate against their schemas at build time.
 
 Goal: run real PostgreSQL in the browser, off the main thread, with a clean API.
 
-- [ ] M1.1 Add `@electric-sql/pglite`; run it inside a **Web Worker** — ADR-0001, NFR-2
-- [ ] M1.2 Worker API: init a per-lesson database, run SQL, return rows/columns or a
+- [x] M1.1 Add `@electric-sql/pglite`; run it inside a **Web Worker** — ADR-0001, NFR-2
+- [x] M1.2 Worker API: init a per-lesson database, run SQL, return rows/columns or a
       readable error — FR-4, FR-5
-- [ ] M1.3 Seed a lesson database from `classic_company.sql`
-- [ ] M1.4 Reset: re-seed the lesson database to its initial state — FR-9
-- [ ] M1.5 Lazy-load the WASM payload only on lesson pages, never on map/landing — NFR-3
-- [ ] M1.6 (Optional) Cache the seeded database in IndexedDB for fast repeat visits — NFR-5
+- [x] M1.3 Seed a lesson database from `classic_company.sql`
+- [x] M1.4 Reset: re-seed the lesson database to its initial state — FR-9
+- [x] M1.5 Lazy-load the WASM payload only on lesson pages, never on map/landing — NFR-3
+- [ ] M1.6 (Optional, deferred) Cache the seeded database in IndexedDB for fast repeat visits — NFR-5
 
 Definition of done: from a test harness, init + seed + run a `SELECT` and a mutation, get
 correct results, and reset back to seed — all in a worker, with the UI thread free.
