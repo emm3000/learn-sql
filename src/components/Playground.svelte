@@ -143,41 +143,6 @@
     }
   }
 
-  // ── Error helper: caret rendering ─────────────────────────────────────────
-
-  /**
-   * Map a Postgres 1-based position offset into the line number, the line
-   * text, and a caret string pointing at the right column.
-   * Returns null when position is absent, non-numeric, or out of bounds.
-   */
-  function buildCaretInfo(
-    sqlText: string,
-    position: string | undefined
-  ): { lineNo: number; lineText: string; caret: string } | null {
-    if (!position) return null;
-    const pos = parseInt(position, 10);
-    if (!Number.isInteger(pos) || pos < 1 || pos > sqlText.length + 1) return null;
-
-    // Walk up to pos-1 chars to find which line/column the error is on
-    const offset = pos - 1;
-    const before = sqlText.slice(0, offset);
-    const lines = sqlText.split('\n');
-    let lineNo = 1;
-    let consumed = 0;
-    for (let i = 0; i < lines.length; i++) {
-      // +1 for the '\n' that separates lines (last line has no trailing \n)
-      const lineLen = lines[i].length + (i < lines.length - 1 ? 1 : 0);
-      if (consumed + lineLen > offset || i === lines.length - 1) {
-        lineNo = i + 1;
-        break;
-      }
-      consumed += lineLen;
-    }
-    const col = before.length - consumed;
-    const lineText = lines[lineNo - 1] ?? '';
-    const caretCol = Math.max(0, Math.min(col, lineText.length));
-    return { lineNo, lineText, caret: ' '.repeat(caretCol) + '^' };
-  }
 </script>
 
 <!-- Unsupported browser — outside the .pg card so it's always visible -->
@@ -453,29 +418,17 @@
           </div>
         {/if}
       {:else if outState === 'error' && queryError !== undefined}
-        <!-- State 4: error (Postgres-style) -->
-        {@const caretInfo = buildCaretInfo(sql, queryError.position)}
+        <!-- State 4: error. PGlite's worker RPC forwards only the error
+             message across the Worker boundary (it serializes `{ message }`
+             and drops position/detail/hint/code), so only the badge + message
+             are shown. The richer Postgres-style caret/HINT/DETAIL UI was
+             removed as dead code; revisit if PGlite starts forwarding those
+             fields. -->
         <div class="err-wrap fade-in" role="alert">
           <div class="err-head">
             <span class="err-badge">ERROR</span>
             <span class="err-msg">{queryError.message}</span>
           </div>
-          {#if queryError.detail}
-            <div class="err-hint" style="margin-top:6px">
-              {queryError.detail}
-            </div>
-          {/if}
-          {#if caretInfo !== null}
-            <pre class="err-src ed-scroll"><span class="err-lineno">LINE {caretInfo.lineNo}:</span> {caretInfo.lineText}{'\n'}<span class="err-caret">{caretInfo.caret}</span></pre>
-          {:else if queryError.position}
-            {@const lines = sql.split('\n')}
-            <pre class="err-src ed-scroll"><span class="err-lineno">LINE 1:</span> {lines[0]}</pre>
-          {/if}
-          {#if queryError.hint}
-            <div class="err-hint">
-              <span class="hint-k">HINT</span>{queryError.hint}
-            </div>
-          {/if}
         </div>
       {:else if outState === 'reset'}
         <!-- Lifecycle: reset confirmation -->

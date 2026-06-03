@@ -343,45 +343,6 @@
   line-height: 1.45;
 }
 
-.err-src {
-  margin: 12px 0 0;
-  padding: 11px 13px;
-  background: var(--ed-surface);
-  border: 1px solid var(--ed-line);
-  border-radius: 8px;
-  font-family: var(--f-mono);
-  font-size: 12.5px;
-  color: var(--ed-ink-2);
-  white-space: pre;
-  overflow-x: auto;
-}
-
-.err-lineno {
-  color: var(--ed-ink-3);
-}
-
-.err-caret {
-  color: var(--sx-keyword);
-}
-
-.err-hint {
-  margin-top: 11px;
-  font-family: var(--f-ui);
-  font-size: 13px;
-  color: var(--ed-ink-2);
-  line-height: 1.5;
-  padding-left: 2px;
-}
-
-.hint-k {
-  font-family: var(--f-mono);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.07em;
-  color: var(--sx-string);
-  margin-right: 8px;
-}
-
 /* ── Grade panels ────────────────────────────────────────── */
 
 .pg-grade {
