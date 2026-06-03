@@ -41,6 +41,17 @@
 
   const busy = $derived(queryRunning || grading || resetting);
 
+  // Derive current output state for the pg-out panel
+  type OutState = 'empty' | 'running' | 'result' | 'error' | 'reset' | 'graded';
+  const outState = $derived.by((): OutState => {
+    if (queryRunning || grading || resetting) return 'running';
+    if (queryError) return 'error';
+    if (resetMessage) return 'reset';
+    if (queryResult !== undefined) return 'result';
+    if (gradeResult !== undefined) return 'graded';
+    return 'empty';
+  });
+
   // ── Lifecycle ─────────────────────────────────────────────────────────────
 
   onMount(() => {
@@ -131,339 +142,420 @@
       grading = false;
     }
   }
+
+  // ── Error helper: caret rendering ─────────────────────────────────────────
+
+  /**
+   * Map a Postgres 1-based position offset into the line number, the line
+   * text, and a caret string pointing at the right column.
+   * Returns null when position is absent, non-numeric, or out of bounds.
+   */
+  function buildCaretInfo(
+    sqlText: string,
+    position: string | undefined
+  ): { lineNo: number; lineText: string; caret: string } | null {
+    if (!position) return null;
+    const pos = parseInt(position, 10);
+    if (!Number.isInteger(pos) || pos < 1 || pos > sqlText.length + 1) return null;
+
+    // Walk up to pos-1 chars to find which line/column the error is on
+    const offset = pos - 1;
+    const before = sqlText.slice(0, offset);
+    const lines = sqlText.split('\n');
+    let lineNo = 1;
+    let consumed = 0;
+    for (let i = 0; i < lines.length; i++) {
+      // +1 for the '\n' that separates lines (last line has no trailing \n)
+      const lineLen = lines[i].length + (i < lines.length - 1 ? 1 : 0);
+      if (consumed + lineLen > offset || i === lines.length - 1) {
+        lineNo = i + 1;
+        break;
+      }
+      consumed += lineLen;
+    }
+    const col = before.length - consumed;
+    const lineText = lines[lineNo - 1] ?? '';
+    const caretCol = Math.max(0, Math.min(col, lineText.length));
+    return { lineNo, lineText, caret: ' '.repeat(caretCol) + '^' };
+  }
 </script>
 
-<div class="playground">
-  <!-- Exercise prompt -->
-  <div class="prompt">
-    <p>{exercise.prompt}</p>
-  </div>
-
-  <!-- Unsupported browser -->
-  {#if dbUnsupported}
-    <div class="db-status db-unsupported" role="alert">
-      This interactive SQL playground needs a modern browser with WebAssembly
-      and Web Worker support. Please switch to a recent version of Chrome, Edge,
-      Firefox, or Safari to run queries here.
+<!-- Unsupported browser — outside the .pg card so it's always visible -->
+{#if dbUnsupported}
+  <div class="pg pg-exercise" role="alert">
+    <div class="pg-bar">
+      <div class="pg-tabs">
+        <span class="pg-tab">query.sql</span>
+        <span class="pg-conn"><span class="conn-dot"></span>postgres · unavailable</span>
+      </div>
     </div>
-  {/if}
+    <div class="pg-lifecycle pg-unsupported">
+      This interactive SQL playground needs a modern browser with WebAssembly and Web
+      Worker support. Please switch to a recent version of Chrome, Edge, Firefox, or
+      Safari to run queries here.
+    </div>
+  </div>
+{:else}
+  <div class="pg pg-exercise">
+    <!-- Top bar -->
+    <div class="pg-bar">
+      <div class="pg-tabs">
+        <span class="pg-tab">query.sql</span>
+        <span class="pg-conn">
+          <span class="conn-dot" aria-hidden="true"></span>
+          postgres · {exercise.id}
+        </span>
+      </div>
+      <div class="pg-actions">
+        <button
+          type="button"
+          class="pg-btn-reset"
+          onclick={resetDb}
+          disabled={busy || !dbReady}
+          title="Restore the database to its initial state"
+          aria-label="Reset database"
+        >
+          <!-- Reset icon -->
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M13 8a5 5 0 1 1-1.5-3.6M13 3v2.2h-2.2"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          {resetting ? 'Resetting…' : 'Reset'}
+        </button>
+        <button
+          type="button"
+          class="pg-btn-grade"
+          onclick={grade}
+          disabled={busy || !dbReady}
+          aria-label="Grade your query"
+        >
+          {#if grading}
+            <svg
+              class="spin"
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.3)" stroke-width="2" />
+              <path
+                d="M14 8a6 6 0 0 0-6-6"
+                stroke="#fff"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            Grading…
+          {:else}
+            Grade
+          {/if}
+        </button>
+        <button
+          type="button"
+          class="pg-btn-run"
+          onclick={runQuery}
+          disabled={busy || !dbReady}
+          aria-label="Run query"
+        >
+          {#if queryRunning}
+            <svg
+              class="spin"
+              width="13"
+              height="13"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,.3)" stroke-width="2" />
+              <path
+                d="M14 8a6 6 0 0 0-6-6"
+                stroke="#fff"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+            Running
+          {:else}
+            <svg
+              width="12"
+              height="13"
+              viewBox="0 0 12 13"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M1.5 1.3l9 5.2-9 5.2V1.3z" fill="#fff" />
+            </svg>
+            Run
+            <span class="run-kbd" aria-hidden="true">⌘↵</span>
+          {/if}
+        </button>
+      </div>
+    </div>
 
-  {#if !dbUnsupported}
-    <!-- Loading / error state for the DB -->
+    <!-- DB loading state (inside the card, above the editor) -->
     {#if !dbReady && !dbError}
-      <div class="db-status loading" role="status" aria-live="polite">
-        Loading database&hellip;
+      <div class="pg-lifecycle loading" role="status" aria-live="polite">
+        <svg
+          class="spin"
+          width="14"
+          height="14"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="8" cy="8" r="6" stroke="var(--ed-line-2)" stroke-width="2" />
+          <path
+            d="M14 8a6 6 0 0 0-6-6"
+            stroke="var(--beginner)"
+            stroke-width="2"
+            stroke-linecap="round"
+          />
+        </svg>
+        Loading database…
       </div>
     {/if}
 
     {#if dbError}
-      <div class="db-status db-error" role="alert">
+      <div class="pg-lifecycle pg-error" role="alert">
         Failed to start the database: {dbError}
       </div>
     {/if}
 
-    <!-- Editor -->
-    <div class="editor-wrapper">
-      <SqlEditor bind:value={sql} disabled={busy || !dbReady} />
-    </div>
+    <!-- CodeMirror editor -->
+    <SqlEditor
+      bind:value={sql}
+      disabled={busy || !dbReady}
+      onRun={() => { if (!busy && dbReady) runQuery(); }}
+    />
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-      <button
-        type="button"
-        onclick={runQuery}
-        disabled={busy || !dbReady}
-        class="btn btn-primary"
-      >
-        {queryRunning ? 'Running…' : 'Run'}
-      </button>
-      <button
-        type="button"
-        onclick={grade}
-        disabled={busy || !dbReady}
-        class="btn btn-grade"
-      >
-        {grading ? 'Grading…' : 'Grade'}
-      </button>
-      <button
-        type="button"
-        onclick={resetDb}
-        disabled={busy || !dbReady}
-        class="btn btn-reset"
-      >
-        {resetting ? 'Resetting…' : 'Reset DB'}
-      </button>
-    </div>
-
-    <!-- Reset confirmation -->
-    {#if resetMessage}
-      <div class="reset-message" role="status" aria-live="polite">
-        {resetMessage}
-      </div>
-    {/if}
-
-    <!-- Error panel -->
-    {#if queryError}
-      <div class="error-panel" role="alert">
-        <strong>Error:</strong> {queryError.message}
-        {#if queryError.detail}
-          <div class="error-detail">Detail: {queryError.detail}</div>
-        {/if}
-        {#if queryError.hint}
-          <div class="error-hint">Hint: {queryError.hint}</div>
-        {/if}
-      </div>
-    {/if}
-
-    <!-- Grade result -->
-    {#if gradeResult !== undefined}
-      {#if gradeResult.passed}
-        <div class="grade-pass" role="status" aria-live="polite">
-          Correct! Well done.
+    <!-- Output panel — 7 states -->
+    <div class="pg-out">
+      {#if outState === 'empty'}
+        <!-- State 1: empty -->
+        <div class="pg-empty">
+          <span class="pg-empty-i" aria-hidden="true">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M2.5 8h11M9.5 4l4 4-4 4"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          Write your query, then Run it. Your result is graded automatically.
         </div>
-      {:else}
-        <div class="grade-fail" role="alert">
-          <strong>Not quite.</strong> {gradeResult.message}
+      {:else if outState === 'running'}
+        <!-- State 2: running -->
+        <div class="pg-empty running" role="status" aria-live="polite">
+          <span class="pg-empty-i" aria-hidden="true">
+            <svg
+              class="spin"
+              width="14"
+              height="14"
+              viewBox="0 0 16 16"
+              fill="none"
+              aria-hidden="true"
+            >
+              <circle cx="8" cy="8" r="6" stroke="var(--ed-line-2)" stroke-width="2" />
+              <path
+                d="M14 8a6 6 0 0 0-6-6"
+                stroke="var(--beginner)"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          Executing query…
+        </div>
+      {:else if outState === 'result' && queryResult !== undefined}
+        <!-- State 3: result -->
+        {@const { fields, rows, affectedRows } = queryResult}
+        {#if fields.length === 0}
+          <!-- Statement with no result set (INSERT/UPDATE/DELETE without RETURNING) -->
+          <div class="res-wrap fade-in">
+            <div class="res-meta">
+              <span class="res-dot ok" aria-hidden="true"></span>
+              Query OK.{affectedRows !== undefined ? ` ${affectedRows} row(s) affected.` : ''}
+            </div>
+          </div>
+        {:else if rows.length === 0}
+          <div class="res-wrap fade-in">
+            <div class="res-meta">
+              <span class="res-dot ok" aria-hidden="true"></span>
+              0 rows returned.
+            </div>
+          </div>
+        {:else}
+          <div class="res-wrap fade-in" role="region" aria-label="Query results">
+            <div class="res-meta">
+              <span class="res-dot ok" aria-hidden="true"></span>
+              {rows.length}
+              {rows.length === 1 ? 'row' : 'rows'} returned
+            </div>
+            <div class="res-scroll ed-scroll">
+              <table class="res-table">
+                <thead>
+                  <tr>
+                    <th class="rn" scope="col" aria-label="Row number">#</th>
+                    {#each fields as field (field.name)}
+                      <th scope="col">
+                        <span class="th-name">{field.name}</span>
+                      </th>
+                    {/each}
+                  </tr>
+                </thead>
+                <tbody>
+                  {#each rows as row, i (i)}
+                    <tr>
+                      <td class="rn">{i + 1}</td>
+                      {#each fields as field (field.name)}
+                        {@const cell = row[field.name]}
+                        {@const isNum = typeof cell === 'number'}
+                        {@const isNull = cell === null || cell === undefined}
+                        <td
+                          class:num={isNum}
+                          class:null-cell={isNull}
+                        >
+                          {#if isNull}
+                            NULL
+                          {:else if isNum}
+                            {(cell as number).toLocaleString('en-US')}
+                          {:else}
+                            {String(cell)}
+                          {/if}
+                        </td>
+                      {/each}
+                    </tr>
+                  {/each}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        {/if}
+      {:else if outState === 'error' && queryError !== undefined}
+        <!-- State 4: error (Postgres-style) -->
+        {@const caretInfo = buildCaretInfo(sql, queryError.position)}
+        <div class="err-wrap fade-in" role="alert">
+          <div class="err-head">
+            <span class="err-badge">ERROR</span>
+            <span class="err-msg">{queryError.message}</span>
+          </div>
+          {#if queryError.detail}
+            <div class="err-hint" style="margin-top:6px">
+              {queryError.detail}
+            </div>
+          {/if}
+          {#if caretInfo !== null}
+            <pre class="err-src ed-scroll"><span class="err-lineno">LINE {caretInfo.lineNo}:</span> {caretInfo.lineText}{'\n'}<span class="err-caret">{caretInfo.caret}</span></pre>
+          {:else if queryError.position}
+            {@const lines = sql.split('\n')}
+            <pre class="err-src ed-scroll"><span class="err-lineno">LINE 1:</span> {lines[0]}</pre>
+          {/if}
+          {#if queryError.hint}
+            <div class="err-hint">
+              <span class="hint-k">HINT</span>{queryError.hint}
+            </div>
+          {/if}
+        </div>
+      {:else if outState === 'reset'}
+        <!-- Lifecycle: reset confirmation -->
+        <div class="pg-reset-msg" role="status" aria-live="polite">
+          {resetMessage}
         </div>
       {/if}
-    {/if}
+      <!-- State 'graded': pg-out is empty; the grade panel below takes over -->
+    </div>
 
-    <!-- Query result table -->
-    {#if queryResult !== undefined}
-    {@const { fields, rows, affectedRows } = queryResult}
-    {#if fields.length === 0}
-      <!-- Statement with no result set (INSERT/UPDATE/DELETE without RETURNING) -->
-      <div class="result-meta">
-        Query OK.{affectedRows !== undefined ? ` ${affectedRows} row(s) affected.` : ''}
-      </div>
-    {:else if rows.length === 0}
-      <div class="result-meta">0 rows returned.</div>
-    {:else}
-      <div class="result-table-wrapper" role="region" aria-label="Query results">
-        <table class="result-table">
-          <thead>
-            <tr>
-              {#each fields as field (field.name)}
-                <th scope="col">{field.name}</th>
-              {/each}
-            </tr>
-          </thead>
-          <tbody>
-            {#each rows as row, i (i)}
-              <tr>
-                {#each fields as field (field.name)}
-                  {@const cell = row[field.name]}
-                  <td class:null-cell={cell === null || cell === undefined}>
-                    {cell === null || cell === undefined ? 'NULL' : String(cell)}
-                  </td>
-                {/each}
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-        <div class="result-footer">{rows.length} row{rows.length !== 1 ? 's' : ''}</div>
+    <!-- Grade panels (pass / fail) — shown below the output area -->
+    {#if gradeResult !== undefined && !busy}
+      <div class="pg-grade fade-up">
+        {#if gradeResult.passed}
+          <!-- State 5: passed -->
+          <div class="grade pass" role="status" aria-live="polite">
+            <div class="grade-top">
+              <span class="grade-check" aria-hidden="true">
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3 8.5l3.2 3.2L13 4.8"
+                    stroke="#fff"
+                    stroke-width="2.2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+              <span class="grade-title">Correct!</span>
+              <span class="grade-pill">+1 toward your green belt</span>
+            </div>
+            <p class="grade-body">Well done. Your query returned the expected result.</p>
+          </div>
+        {:else}
+          <!-- State 6: failed -->
+          <div class="grade fail" role="alert">
+            <div class="grade-top">
+              <span class="grade-x" aria-hidden="true">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M4 4l8 8M12 4l-8 8"
+                    stroke="#9a6b1e"
+                    stroke-width="2.1"
+                    stroke-linecap="round"
+                  />
+                </svg>
+              </span>
+              <span class="grade-title">Not quite.</span>
+            </div>
+            <p class="grade-body">{gradeResult.message}</p>
+            <div class="grade-foot">
+              Keep going — no solution to peek at, and that's on purpose. Revise
+              your query and run it again.
+            </div>
+          </div>
+        {/if}
       </div>
     {/if}
-  {/if}
+  </div>
 {/if}
-</div>
 
 <style>
-  .playground {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    font-family: system-ui, sans-serif;
-    max-width: 900px;
-  }
+  /* All surface/state styles live in src/styles/playground.css,
+     imported where this component is used. Scoped here: only
+     the .spin keyframe (already in global.css via .spin class,
+     but we reference it on SVGs inside this component) and
+     the editor container wrapper. */
 
-  .prompt {
-    background: #f0f9ff;
-    border-left: 4px solid #3b82f6;
-    padding: 10px 14px;
-    border-radius: 0 6px 6px 0;
-  }
-
-  .prompt p {
-    margin: 0;
-    color: #1e3a5f;
-    font-size: 15px;
-    line-height: 1.5;
-  }
-
-  .db-status {
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-  }
-
-  .db-status.loading {
-    background: #fefce8;
-    color: #854d0e;
-    border: 1px solid #fde047;
-  }
-
-  .db-status.db-error {
-    background: #fef2f2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
-  }
-
-  .db-status.db-unsupported {
-    background: #fffbeb;
-    color: #92400e;
-    border: 1px solid #fcd34d;
-    line-height: 1.55;
-  }
-
-  .editor-wrapper {
-    min-height: 120px;
-  }
-
-  .toolbar {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    padding: 6px 16px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.15s;
-  }
-
-  .btn:disabled {
-    opacity: 0.45;
-    cursor: not-allowed;
-  }
-
-  .btn-primary {
-    background: #3b82f6;
-    color: #fff;
-  }
-
-  .btn-primary:not(:disabled):hover {
-    background: #2563eb;
-  }
-
-  .btn-grade {
-    background: #047857;
-    color: #fff;
-  }
-
-  .btn-grade:not(:disabled):hover {
-    background: #065f46;
-  }
-
-  .btn-reset {
-    background: #f3f4f6;
-    color: #374151;
-    border: 1px solid #d1d5db;
-  }
-
-  .btn-reset:not(:disabled):hover {
-    background: #e5e7eb;
-  }
-
-  .reset-message {
-    font-size: 13px;
-    color: #374151;
-    padding: 6px 10px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-  }
-
-  .error-panel {
-    background: #fef2f2;
-    border: 1px solid #fca5a5;
-    border-radius: 6px;
-    padding: 10px 14px;
-    color: #991b1b;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  .error-detail,
-  .error-hint {
-    margin-top: 4px;
-    font-size: 13px;
-    color: #b91c1c;
-  }
-
-  .grade-pass {
-    background: #f0fdf4;
-    border: 1px solid #86efac;
-    border-radius: 6px;
-    padding: 10px 14px;
-    color: #166534;
-    font-size: 14px;
-    font-weight: 500;
-  }
-
-  .grade-fail {
-    background: #fff7ed;
-    border: 1px solid #fdba74;
-    border-radius: 6px;
-    padding: 10px 14px;
-    color: #9a3412;
-    font-size: 14px;
-  }
-
-  .result-table-wrapper {
-    overflow-x: auto;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-  }
-
-  .result-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    font-family: ui-monospace, monospace;
-  }
-
-  .result-table th {
-    background: #f9fafb;
-    padding: 6px 12px;
-    text-align: left;
-    font-weight: 600;
-    color: #374151;
-    border-bottom: 1px solid #e5e7eb;
-    white-space: nowrap;
-  }
-
-  .result-table td {
-    padding: 5px 12px;
-    border-bottom: 1px solid #f3f4f6;
-    color: #111827;
-    white-space: nowrap;
-  }
-
-  .result-table tr:last-child td {
-    border-bottom: none;
-  }
-
-  .result-table td.null-cell {
-    color: #6b7280;
-    font-style: italic;
-  }
-
-  .result-meta {
-    font-size: 13px;
-    color: #6b7280;
-    padding: 6px 2px;
-  }
-
-  .result-footer {
-    padding: 4px 12px;
-    font-size: 12px;
-    color: #6b7280;
-    background: #f9fafb;
-    border-top: 1px solid #e5e7eb;
-  }
+  /* Editor container: no additional scoped wrapper needed —
+     SqlEditor.svelte manages its own container div. */
 </style>

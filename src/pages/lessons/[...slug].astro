@@ -8,6 +8,7 @@ import { parseSeedSchema } from '../../lib/schema/parse-seed.ts';
 import seedSql from '../../../seed/classic_company.sql?raw';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import '../../styles/lesson.css';
+import '../../styles/playground.css';
 
 export async function getStaticPaths() {
   const lessons = await getCollection('lessons', ({ data }) => !data.draft);

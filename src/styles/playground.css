@@ -1,0 +1,523 @@
+/* ============================================================
+   pgGym — Playground dark editor surface
+   Token-only; no font imports (those live in global.css).
+   Covers .pg*, .res-*, .err-*, .grade*, .pg-empty* classes
+   used by Playground.svelte in both contexts:
+     - standalone src/pages/playground.astro
+     - embedded via LessonExercises in lesson pages
+   ============================================================ */
+
+/* ── Root card ───────────────────────────────────────────── */
+
+.pg {
+  background: var(--ed-bg);
+  border: 1px solid var(--ed-line);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--sh-2);
+  font-family: var(--f-mono);
+}
+
+.pg-exercise {
+  box-shadow:
+    0 20px 50px -20px rgba(28, 26, 22, 0.4),
+    0 4px 14px -6px rgba(28, 26, 22, 0.18);
+}
+
+/* ── Top bar ─────────────────────────────────────────────── */
+
+.pg-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 11px 9px 13px;
+  background: var(--ed-surface);
+  border-bottom: 1px solid var(--ed-line);
+}
+
+.pg-tabs {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.pg-tab {
+  font-size: 12px;
+  color: var(--ed-ink);
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.pg-tab::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--beginner);
+  display: inline-block;
+  opacity: 0.9;
+}
+
+.pg-conn {
+  font-size: 11px;
+  color: var(--ed-ink-3);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.02em;
+}
+
+.conn-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #4fae6f;
+  box-shadow: 0 0 0 3px rgba(79, 174, 111, 0.16);
+}
+
+/* ── Bar actions ─────────────────────────────────────────── */
+
+.pg-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pg-btn-reset {
+  font-family: var(--f-ui);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ed-ink-2);
+  background: transparent;
+  border: 1px solid var(--ed-line-2);
+  padding: 6px 11px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    background 0.15s;
+}
+
+.pg-btn-reset:hover {
+  color: var(--ed-ink);
+  border-color: var(--ed-ink-3);
+  background: var(--ed-raised);
+}
+
+.pg-btn-reset:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.pg-btn-run {
+  font-family: var(--f-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--beginner);
+  border: none;
+  padding: 7px 13px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.12) inset,
+    0 2px 8px -2px color-mix(in oklab, var(--beginner) 60%, black);
+  transition:
+    filter 0.15s,
+    transform 0.06s;
+}
+
+.pg-btn-run:hover {
+  filter: brightness(1.08);
+}
+
+.pg-btn-run:active {
+  transform: translateY(1px);
+}
+
+.pg-btn-run:disabled {
+  filter: saturate(0.6) brightness(0.9);
+  cursor: not-allowed;
+}
+
+.pg-btn-grade {
+  font-family: var(--f-ui);
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  background: color-mix(in oklab, var(--beginner) 70%, #000);
+  border: none;
+  padding: 7px 13px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  transition:
+    filter 0.15s,
+    transform 0.06s;
+}
+
+.pg-btn-grade:hover {
+  filter: brightness(1.08);
+}
+
+.pg-btn-grade:disabled {
+  filter: saturate(0.6) brightness(0.9);
+  cursor: not-allowed;
+}
+
+.run-kbd {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  opacity: 0.7;
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+/* ── Output area ─────────────────────────────────────────── */
+
+.pg-out {
+  background: var(--ed-bg);
+  border-top: 1px solid var(--ed-line);
+}
+
+/* Empty + Running states */
+.pg-empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  color: var(--ed-ink-3);
+  font-family: var(--f-ui);
+  font-size: 13.5px;
+}
+
+.pg-empty.running {
+  color: var(--ed-ink-2);
+}
+
+.pg-empty-i {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  color: var(--ed-ink-3);
+  background: var(--ed-surface);
+  border: 1px solid var(--ed-line);
+}
+
+/* ── Result table ────────────────────────────────────────── */
+
+.res-wrap {
+  padding: 0;
+}
+
+.res-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-family: var(--f-ui);
+  font-size: 12px;
+  color: var(--ed-ink-2);
+  border-bottom: 1px solid var(--ed-line);
+}
+
+.res-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.res-dot.ok {
+  background: var(--beginner);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--beginner) 22%, transparent);
+}
+
+.res-scroll {
+  max-height: 340px;
+  overflow: auto;
+}
+
+.res-table {
+  border-collapse: collapse;
+  width: 100%;
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+}
+
+.res-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--ed-surface);
+  text-align: left;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--ed-line-2);
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.th-name {
+  color: var(--ed-ink);
+  font-weight: 600;
+}
+
+.res-table td {
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--ed-line);
+  color: var(--ed-ink);
+  white-space: nowrap;
+}
+
+.res-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--sx-number);
+}
+
+.res-table td.null-cell {
+  color: var(--ed-ink-3);
+  font-style: italic;
+}
+
+.res-table .rn {
+  color: var(--ed-ink-3);
+  width: 1%;
+  text-align: right;
+  padding-right: 14px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.res-table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.res-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ── Error panel ─────────────────────────────────────────── */
+
+.err-wrap {
+  padding: 15px 16px 16px;
+}
+
+.err-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.err-badge {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #f0b59c;
+  background: rgba(220, 90, 60, 0.14);
+  border: 1px solid rgba(220, 90, 60, 0.3);
+  padding: 3px 7px;
+  border-radius: 5px;
+  flex: none;
+  margin-top: 1px;
+}
+
+.err-msg {
+  font-family: var(--f-ui);
+  font-size: 14px;
+  color: var(--ed-ink);
+  line-height: 1.45;
+}
+
+.err-src {
+  margin: 12px 0 0;
+  padding: 11px 13px;
+  background: var(--ed-surface);
+  border: 1px solid var(--ed-line);
+  border-radius: 8px;
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: var(--ed-ink-2);
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.err-lineno {
+  color: var(--ed-ink-3);
+}
+
+.err-caret {
+  color: var(--sx-keyword);
+}
+
+.err-hint {
+  margin-top: 11px;
+  font-family: var(--f-ui);
+  font-size: 13px;
+  color: var(--ed-ink-2);
+  line-height: 1.5;
+  padding-left: 2px;
+}
+
+.hint-k {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  color: var(--sx-string);
+  margin-right: 8px;
+}
+
+/* ── Grade panels ────────────────────────────────────────── */
+
+.pg-grade {
+  background: var(--ed-bg);
+  padding: 0 12px 12px;
+}
+
+.grade {
+  border-radius: 10px;
+  padding: 15px 16px;
+}
+
+.grade.pass {
+  background: #15281c;
+  border: 1px solid #245a38;
+}
+
+.grade.fail {
+  background: #2a2316;
+  border: 1px solid #5c481f;
+}
+
+.grade-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.grade-check {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--beginner);
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.grade-x {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e7c98a;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.grade-title {
+  font-family: var(--f-ui);
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.grade.pass .grade-title {
+  color: #b6e9c6;
+}
+
+.grade.fail .grade-title {
+  color: #ebd4a0;
+}
+
+.grade-pill {
+  margin-left: auto;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  color: #8fd3a6;
+  background: rgba(36, 90, 56, 0.5);
+  border: 1px solid #2f6b43;
+  padding: 4px 9px;
+  border-radius: 20px;
+}
+
+.grade-body {
+  font-family: var(--f-ui);
+  font-size: 13.5px;
+  line-height: 1.6;
+  margin: 10px 0 0;
+}
+
+.grade.pass .grade-body {
+  color: #cbe9d4;
+}
+
+.grade.fail .grade-body {
+  color: #e4d4b0;
+}
+
+.grade-foot {
+  margin-top: 12px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-family: var(--f-ui);
+  font-size: 12px;
+  color: #b49e78;
+  line-height: 1.5;
+}
+
+/* ── Lifecycle states (no design ref — dark surface) ─────── */
+
+/* DB loading / error / unsupported — styled like pg-empty */
+.pg-lifecycle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  font-family: var(--f-ui);
+  font-size: 13.5px;
+  border-top: 1px solid var(--ed-line);
+}
+
+.pg-lifecycle.loading {
+  color: var(--ed-ink-2);
+}
+
+.pg-lifecycle.pg-error {
+  color: #f0b59c;
+}
+
+.pg-lifecycle.pg-unsupported {
+  color: var(--sx-keyword);
+  line-height: 1.55;
+}
+
+/* Reset message */
+.pg-reset-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  font-family: var(--f-ui);
+  font-size: 12.5px;
+  color: var(--sx-string);
+  background: var(--ed-surface);
+  border-top: 1px solid var(--ed-line);
+}
