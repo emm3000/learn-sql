@@ -11,19 +11,17 @@ const exercise = lesson01Exercises[0];
   title="SQL Playground"
   description="Write SQL against a real PostgreSQL database running in your browser."
 >
-    <header>
-      <h1>SQL Playground</h1>
-      <p>
-        Write SQL against a real PostgreSQL database running in your browser.
-      </p>
-    </header>
-    <main id="main-content" tabindex="-1">
-      <PlaygroundIsland
-        seedSql={seedSql}
-        exercise={exercise}
-        client:only="svelte"
-      />
-    </main>
+  <header>
+    <h1>SQL Playground</h1>
+    <p>Write SQL against a real PostgreSQL database running in your browser.</p>
+  </header>
+  <main id="main-content" tabindex="-1">
+    <PlaygroundIsland
+      seedSql={seedSql}
+      exercise={exercise}
+      client:only="svelte"
+    />
+  </main>
 </BaseLayout>
 
 <style>
@@ -45,10 +43,13 @@ const exercise = lesson01Exercises[0];
   }
 
   main {
+    /* TODO(reskin): temporary gutter until this page is reskinned */
     background: #fff;
     border: 1px solid #e5e7eb;
     border-radius: 10px;
     padding: 20px;
     max-width: 960px;
+    margin: 24px auto;
+    width: calc(100% - 32px);
   }
 </style>

@@ -1,5 +1,6 @@
 ---
 import { SITE_NAME } from '../lib/site.ts';
+import '../styles/global.css';
 
 interface Props {
   title: string;
@@ -67,42 +68,3 @@ if (canonical) {
     <slot />
   </body>
 </html>
-
-<style is:global>
-  body {
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    padding: 24px;
-    background: #f9fafb;
-    color: #111827;
-  }
-
-  /* Tighten edge padding on phones so content keeps its width (NFR-10). */
-  @media (max-width: 480px) {
-    body {
-      padding: 16px;
-    }
-  }
-
-  :focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
-  }
-
-  .skip-link {
-    position: absolute;
-    left: 8px;
-    top: -48px;
-    z-index: 100;
-    padding: 8px 12px;
-    background: #2563eb;
-    color: #fff;
-    border-radius: 0 0 6px 6px;
-    text-decoration: none;
-    transition: top 0.15s;
-  }
-
-  .skip-link:focus {
-    top: 0;
-  }
-</style>
