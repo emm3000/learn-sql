@@ -85,6 +85,31 @@
   gap: 8px;
 }
 
+/* On narrow screens the connection label + three action buttons don't fit
+   on one row, which clipped the Run button. Wrap the bar: filename/connection
+   on the first row (connection truncates with an ellipsis), actions on the
+   second row, right-aligned. */
+@media (max-width: 560px) {
+  .pg-bar {
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+  .pg-tabs {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+  .pg-conn {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .pg-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 .pg-btn-reset {
   font-family: var(--f-ui);
   font-size: 12.5px;
