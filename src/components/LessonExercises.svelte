@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount, untrack } from 'svelte';
   import type { Exercise } from '../lib/exercise-schema.ts';
   import { markExerciseComplete, getCompletedExercises } from '../lib/progress/progress.ts';
   import Playground from './Playground.svelte';
@@ -8,17 +8,26 @@
     lessonSlug: string;
     exercises: Exercise[];
     seedSql: string;
+    beltColor?: string;
+    beltInk?: string;
   }
 
-  const { lessonSlug, exercises, seedSql }: Props = $props();
+  const {
+    lessonSlug,
+    exercises,
+    seedSql,
+    beltColor = '#16a34a',
+    beltInk = '#15803d',
+  }: Props = $props();
 
   // ── State ──────────────────────────────────────────────────────────────────
 
   // Completed exercise ids — populated from localStorage on mount.
   let completed = $state(new Set<string>());
 
-  // Index of the currently open exercise, or -1 if none.
-  let openIndex = $state(exercises.length > 0 ? 0 : -1);
+  // Index of the currently open exercise, or -1 if none. `exercises` is static
+  // per lesson, so we read its initial length without creating a dependency.
+  let openIndex = $state(untrack(() => (exercises.length > 0 ? 0 : -1)));
 
   // ── Lifecycle ──────────────────────────────────────────────────────────────
 
@@ -40,9 +49,7 @@
   }
 </script>
 
-<div class="lesson-exercises">
-  <h2 class="section-heading">Exercises</h2>
-
+<div class="lesson-exercises" style="--c: {beltColor}; --cink: {beltInk}">
   {#if exercises.length === 0}
     <p class="no-exercises">No exercises available for this lesson yet.</p>
   {:else}
@@ -50,19 +57,53 @@
       {#each exercises as exercise, i (exercise.id)}
         {@const isOpen = openIndex === i}
         {@const isDone = completed.has(exercise.id)}
-        <li class="exercise-item" class:is-open={isOpen} class:is-done={isDone}>
+        <li class="exercise" class:is-open={isOpen} class:is-done={isDone}>
           <button
             type="button"
-            class="exercise-header"
+            class="ex-header"
             aria-expanded={isOpen}
             onclick={() => toggle(i)}
           >
-            <span class="exercise-number">{i + 1}</span>
-            <span class="exercise-prompt">{exercise.prompt}</span>
-            {#if isDone}
-              <span class="check-badge" aria-label="Completed">&#10003;</span>
-            {/if}
-            <span class="chevron" aria-hidden="true">{isOpen ? '▲' : '▼'}</span>
+            <div class="ex-head">
+              <span class="ex-badge">Exercise {i + 1}</span>
+              <span class="ex-rule" aria-hidden="true"></span>
+              <span class="ex-note">
+                {#if isDone}
+                  <span class="ex-check" aria-label="Completed">
+                    <svg width="11" height="11" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path
+                        d="M3.5 8.3l3 3L12.5 5"
+                        stroke="currentColor"
+                        stroke-width="2.4"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                    done
+                  </span>
+                {:else}
+                  graded · no solution to reveal
+                {/if}
+              </span>
+              <span class="ex-chevron" aria-hidden="true">
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  style="transform: rotate({isOpen ? 180 : 0}deg); transition: transform .2s"
+                >
+                  <path
+                    d="M4 6l4 4 4-4"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
+            </div>
+            <p class="ex-prompt">{exercise.prompt}</p>
           </button>
 
           {#if isOpen}
@@ -82,20 +123,13 @@
 
 <style>
   .lesson-exercises {
-    margin-top: 32px;
-    font-family: system-ui, sans-serif;
-  }
-
-  .section-heading {
-    font-size: 20px;
-    font-weight: 700;
-    color: #111827;
-    margin: 0 0 16px;
+    margin-top: 0;
   }
 
   .no-exercises {
-    color: #6b7280;
-    font-size: 15px;
+    font-family: var(--f-serif);
+    color: var(--ink-3);
+    font-size: 16px;
   }
 
   .exercise-list {
@@ -104,91 +138,120 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 20px;
   }
 
-  .exercise-item {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+  /* Card frame — port of .exercise in screens.css */
+  .exercise {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-lg);
+    box-shadow: var(--sh-2);
     overflow: hidden;
-    background: #fff;
   }
 
-  .exercise-item.is-done {
-    border-color: #86efac;
+  /* Left accent stripe in belt color */
+  .exercise::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 26px;
+    bottom: 26px;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--c);
   }
 
-  .exercise-item.is-open {
-    border-color: #3b82f6;
+  .exercise.is-done {
+    border-color: color-mix(in oklab, var(--c) 35%, var(--line-2));
   }
 
-  .exercise-header {
+  /* The whole header+prompt area is the toggle button */
+  .ex-header {
     width: 100%;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
     background: none;
     border: none;
     cursor: pointer;
     text-align: left;
-    font-size: 15px;
-    color: #111827;
-    transition: background 0.12s;
+    padding: 28px 28px 0;
+    display: block;
   }
 
-  .exercise-header:hover {
-    background: #f9fafb;
-  }
-
-  .exercise-item.is-open .exercise-header {
-    background: #eff6ff;
-  }
-
-  .exercise-number {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background: #e5e7eb;
-    color: #374151;
-    font-size: 12px;
-    font-weight: 700;
+  /* .ex-head row: badge / rule / note / chevron */
+  .ex-head {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 14px;
+    margin-bottom: 14px;
   }
 
-  .exercise-item.is-done .exercise-number {
-    background: #bbf7d0;
-    color: #166534;
-  }
-
-  .exercise-prompt {
-    flex: 1;
-    line-height: 1.4;
-  }
-
-  .check-badge {
-    flex-shrink: 0;
-    color: #16a34a;
-    font-size: 16px;
-    font-weight: 700;
-  }
-
-  .chevron {
-    flex-shrink: 0;
-    color: #6b7280;
+  .ex-badge {
+    font-family: var(--f-mono);
     font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--cink);
+    flex: none;
   }
 
-  .exercise-header:focus-visible {
-    outline: 2px solid #2563eb;
-    outline-offset: -2px;
+  .ex-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .ex-note {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-4);
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .ex-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--cink);
+  }
+
+  .ex-chevron {
+    flex: none;
+    color: var(--ink-4);
+    display: flex;
+    align-items: center;
+  }
+
+  .ex-prompt {
+    font-family: var(--f-ui);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
   }
 
   .exercise-body {
-    padding: 16px;
-    border-top: 1px solid #e5e7eb;
+    padding: 0 28px 28px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+  }
+
+  @media (max-width: 620px) {
+    .ex-header {
+      padding: 20px 18px 0;
+    }
+    .exercise-body {
+      padding: 16px 18px 20px;
+    }
+    .exercise::before {
+      top: 20px;
+      bottom: 20px;
+    }
   }
 </style>

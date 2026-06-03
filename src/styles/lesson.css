@@ -1,0 +1,402 @@
+/* ============================================================
+   pgGym — lesson page layout & styles (Slice 2)
+   Imports no fonts/tokens — those live in global.css.
+   Lesson root sets --c (belt color) and --cink (belt ink).
+   ============================================================ */
+
+/* ---------- lesson nav (sticky top bar) ---------- */
+.lnav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 13px 28px;
+  background: color-mix(in oklab, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.lnav-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--f-ui);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink-2);
+  background: transparent;
+  border: none;
+  padding: 6px 10px 6px 6px;
+  border-radius: 8px;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  white-space: nowrap;
+  flex: none;
+  text-decoration: none;
+}
+.lnav-back:hover {
+  color: var(--ink);
+  background: var(--bg-2);
+}
+
+.lnav-mid {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.lnav-belt {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cink);
+  white-space: nowrap;
+  flex: none;
+  font-family: var(--f-ui);
+}
+
+.lnav-belt-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.lnav-sep {
+  color: var(--ink-4);
+}
+
+.lnav-lesson {
+  font-size: 13px;
+  font-family: var(--f-ui);
+  color: var(--ink-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lnav-dots {
+  display: flex;
+  gap: 7px;
+  flex: none;
+}
+
+.lnav-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid var(--line-2);
+  background: transparent;
+  display: block;
+  transition: all 0.15s;
+}
+.lnav-dot:hover {
+  border-color: var(--ink-3);
+}
+.lnav-dot.done {
+  background: var(--c);
+  border-color: var(--c);
+}
+.lnav-dot.on {
+  background: var(--c);
+  border-color: var(--c);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--c) 20%, transparent);
+}
+
+/* ---------- two-column grid ---------- */
+.lesson-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 28px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 256px;
+  gap: 56px;
+  align-items: start;
+}
+
+/* ---------- reading column ---------- */
+.reading {
+  padding: 52px 0 80px;
+  min-width: 0;
+}
+.reading > * {
+  max-width: var(--maxread);
+}
+
+/* ---------- lesson header ---------- */
+.lesson-top {
+  margin-bottom: 36px;
+}
+
+.lesson-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--cink);
+  text-transform: uppercase;
+}
+
+.lk-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--c);
+}
+
+.lesson-h {
+  font-family: var(--f-ui);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  font-size: clamp(30px, 4vw, 42px);
+  line-height: 1.08;
+  margin: 16px 0 0;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.lesson-dek {
+  font-family: var(--f-serif);
+  font-size: 20px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  margin: 18px 0 0;
+}
+
+/* ---------- prose (rendered markdown) ---------- */
+/* Plain CSS file, no scoping — use full descendant selectors */
+
+.reading .prose {
+  margin-top: 0;
+}
+
+.reading .prose h2 {
+  font-family: var(--f-ui);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 40px 0 0;
+}
+.reading .prose h2:first-child {
+  margin-top: 0;
+}
+
+.reading .prose p {
+  font-family: var(--f-serif);
+  font-size: 18.5px;
+  line-height: 1.72;
+  color: #2c2a24;
+  margin: 16px 0 0;
+  text-wrap: pretty;
+}
+
+.reading .prose p b,
+.reading .prose p strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.reading .prose p i,
+.reading .prose p em {
+  font-style: italic;
+}
+
+.reading .prose ul,
+.reading .prose ol {
+  font-family: var(--f-serif);
+  font-size: 18px;
+  line-height: 1.68;
+  color: #2c2a24;
+  margin: 14px 0 0;
+  padding-left: 26px;
+}
+.reading .prose li {
+  margin-top: 6px;
+}
+
+/* Fenced code blocks — dark editorial SQL surface, matching the interactive
+   editor (Slice 3). Shiki runs with the 'css-variables' theme; we map its
+   --astro-code-* variables onto our --ed-* / --sx-* design tokens so every
+   SQL surface in the product looks identical. */
+.reading .prose pre {
+  --astro-code-background: var(--ed-bg);
+  --astro-code-foreground: var(--sx-ident);
+  --astro-code-token-keyword: var(--sx-keyword);
+  --astro-code-token-string: var(--sx-string);
+  --astro-code-token-string-expression: var(--sx-string);
+  --astro-code-token-constant: var(--sx-number);
+  --astro-code-token-comment: var(--sx-comment);
+  --astro-code-token-punctuation: var(--sx-punct);
+  --astro-code-token-function: var(--sx-ident);
+  --astro-code-token-parameter: var(--sx-ident);
+  --astro-code-token-link: var(--sx-string);
+  border: 1px solid var(--ed-line);
+  border-radius: var(--r-sm);
+  padding: 16px 18px;
+  overflow-x: auto;
+  margin: 20px 0 0;
+  max-width: 100%;
+  box-shadow: var(--sh-1);
+}
+.reading .prose pre code {
+  font-family: var(--f-mono);
+  font-size: 13.5px;
+  line-height: 1.65;
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+}
+
+/* Inline code (not inside a pre) */
+.reading .prose :not(pre) > code {
+  font-family: var(--f-mono);
+  font-size: 0.86em;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: var(--ink);
+}
+
+/* Horizontal rules (---) as visual dividers */
+.reading .prose hr {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 36px 0;
+}
+
+/* ---------- exercises section ---------- */
+.exercises-section {
+  margin-top: 52px;
+}
+
+/* ---------- lesson footer nav ---------- */
+.lesson-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 44px 0 0;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+  flex-wrap: wrap;
+}
+
+/* ---------- right rail ---------- */
+.rail {
+  padding-top: 52px;
+}
+
+.rail-sticky {
+  position: sticky;
+  top: 78px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ---------- schema cards ---------- */
+.schema-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.schema {
+  background: var(--surface);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--sh-1);
+}
+
+.schema-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink-2);
+}
+
+.schema-name {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.schema-cols-count {
+  margin-left: auto;
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--ink-4);
+}
+
+.schema-cols {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+}
+
+.schema-cols li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.schema-cols li:hover {
+  background: var(--bg-2);
+}
+
+.sc-name {
+  font-family: var(--f-mono);
+  font-size: 12.5px;
+  color: var(--ink);
+}
+
+.sc-type {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  color: var(--ink-4);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px) {
+  .lesson-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .rail {
+    display: none;
+  }
+  .reading {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 620px) {
+  .lesson-grid {
+    padding: 0 20px;
+  }
+  .lnav {
+    padding: 12px 18px;
+    gap: 12px;
+  }
+  .lnav-lesson {
+    display: none;
+  }
+}
