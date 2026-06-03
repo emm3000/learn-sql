@@ -1,0 +1,363 @@
+/* ============================================================
+   pgGym — Belt Map screen styles
+   Ported from the design prototype (screens.css, belt-map section).
+   Lesson-page styles are intentionally excluded (next slice).
+   ============================================================ */
+
+/* ---------- top nav ---------- */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: color-mix(in oklab, var(--bg) 86%, transparent);
+  backdrop-filter: saturate(1.4) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.nav-note {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+/* ---------- hero ---------- */
+.hero {
+  padding: 92px 32px 56px;
+}
+.hero-in {
+  max-width: 880px;
+  margin: 0 auto;
+}
+.hero-h {
+  font-family: var(--f-ui);
+  font-weight: 800;
+  letter-spacing: -0.032em;
+  font-size: clamp(40px, 6.6vw, 76px);
+  line-height: 1.02;
+  margin: 18px 0 0;
+  color: var(--ink);
+  text-wrap: balance;
+}
+.hero-promise {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(20px, 2.6vw, 27px);
+  color: var(--ink-2);
+  margin: 26px 0 0;
+  letter-spacing: -0.01em;
+}
+.hero-sub {
+  font-family: var(--f-serif);
+  font-size: 19px;
+  line-height: 1.62;
+  color: var(--ink-2);
+  max-width: 60ch;
+  margin: 18px 0 0;
+}
+.hero-sub code {
+  font-family: var(--f-mono);
+  font-size: 0.86em;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  padding: 1px 6px;
+  border-radius: 5px;
+  color: var(--ink);
+}
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 34px;
+  flex-wrap: wrap;
+}
+.btn.lg {
+  font-size: 15px;
+  padding: 13px 22px;
+  border-radius: 11px;
+}
+.hero-meta {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  letter-spacing: 0.01em;
+}
+
+/* ---------- journey ---------- */
+.journey {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 30px 32px 40px;
+}
+.journey-head {
+  padding: 40px 0 30px;
+  border-top: 1px solid var(--line);
+}
+.journey-h {
+  font-family: var(--f-ui);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  font-size: 32px;
+  margin: 12px 0 0;
+  color: var(--ink);
+}
+.journey-sub {
+  font-family: var(--f-serif);
+  font-size: 18px;
+  color: var(--ink-2);
+  margin: 10px 0 0;
+}
+
+.belts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.belt {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 22px;
+}
+
+/* rail with node + connecting line */
+.belt-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.belt-node {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex: none;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  margin-top: 4px;
+  background: var(--surface);
+  border: 1.5px solid var(--line-2);
+  color: var(--ink-3);
+  font-family: var(--f-mono);
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.belt-active .belt-node {
+  background: var(--c);
+  border-color: var(--c);
+  color: #fff;
+  box-shadow: 0 0 0 5px color-mix(in oklab, var(--c) 16%, transparent);
+}
+.node-i {
+  line-height: 1;
+}
+.belt-line {
+  width: 2px;
+  flex: 1;
+  margin: 6px 0;
+  min-height: 24px;
+  background: linear-gradient(var(--line-2), var(--line));
+}
+.belt-active .belt-line {
+  background: linear-gradient(var(--c), var(--line-2));
+  opacity: 0.5;
+}
+
+/* belt card */
+.belt-card {
+  padding-bottom: 30px;
+}
+.belt-card-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.belt-titles {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+.belt-name-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.belt-name {
+  font-family: var(--f-ui);
+  font-weight: 700;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: var(--ink);
+}
+.belt-locked .belt-name {
+  color: var(--ink-3);
+}
+.belt-tagline {
+  font-family: var(--f-serif);
+  font-size: 17px;
+  color: var(--ink-2);
+  margin: 4px 0 0;
+}
+.belt-locked .belt-tagline {
+  color: var(--ink-4);
+}
+
+.chip {
+  font-family: var(--f-mono);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.chip-active {
+  color: var(--cink);
+  background: color-mix(in oklab, var(--c) 12%, white);
+  border: 1px solid color-mix(in oklab, var(--c) 28%, white);
+}
+.chip-done {
+  color: var(--cink);
+  background: color-mix(in oklab, var(--c) 12%, white);
+  border: 1px solid color-mix(in oklab, var(--c) 28%, white);
+}
+.chip-soon {
+  color: var(--ink-3);
+  background: var(--bg-2);
+  border: 1px solid var(--line-2);
+}
+
+.belt-foot {
+  font-family: var(--f-serif);
+  font-size: 15px;
+  color: var(--ink-3);
+  margin: 14px 0 0;
+  max-width: 56ch;
+  line-height: 1.55;
+}
+.belt-locked .belt-card-head {
+  opacity: 0.68;
+}
+
+/* ---------- belt band graphic ---------- */
+.belt-band {
+  position: relative;
+  width: calc(58px * var(--s, 1));
+  height: calc(40px * var(--s, 1));
+  flex: none;
+  display: block;
+  margin-top: 2px;
+}
+.belt-band.dim {
+  filter: grayscale(0.4) opacity(0.6);
+}
+.bb-strap {
+  position: absolute;
+  top: calc(11px * var(--s, 1));
+  height: calc(11px * var(--s, 1));
+  width: calc(26px * var(--s, 1));
+  background: var(--c);
+  border-radius: 3px;
+}
+.bb-strap.left {
+  left: 0;
+  border-radius: 3px 1px 1px 3px;
+  box-shadow: inset -6px 0 8px -6px rgba(0, 0, 0, 0.35);
+}
+.bb-strap.right {
+  right: 0;
+  border-radius: 1px 3px 3px 1px;
+  box-shadow: inset 6px 0 8px -6px rgba(0, 0, 0, 0.35);
+}
+.bb-knot {
+  position: absolute;
+  left: 50%;
+  top: calc(8px * var(--s, 1));
+  transform: translateX(-50%);
+  width: calc(17px * var(--s, 1));
+  height: calc(17px * var(--s, 1));
+  background: var(--c);
+  border-radius: 4px;
+  z-index: 2;
+  filter: brightness(1.08);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
+}
+.bb-tail {
+  position: absolute;
+  top: calc(20px * var(--s, 1));
+  width: calc(7px * var(--s, 1));
+  height: calc(17px * var(--s, 1));
+  background: var(--c);
+  border-radius: 0 0 3px 3px;
+  z-index: 1;
+}
+.bb-tail.t1 {
+  left: calc(50% - 8px * var(--s, 1));
+  transform: rotate(7deg);
+  filter: brightness(0.92);
+}
+.bb-tail.t2 {
+  left: calc(50% + 1px * var(--s, 1));
+  transform: rotate(-6deg);
+}
+
+/* ---------- footer ---------- */
+.foot {
+  max-width: 880px;
+  margin: 30px auto 0;
+  padding: 30px 32px 60px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.wm.sm {
+  font-size: 15px;
+}
+.foot-note {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--ink-3);
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 620px) {
+  .nav,
+  .hero,
+  .journey,
+  .foot {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .hero {
+    padding-top: 56px;
+  }
+  .belt {
+    grid-template-columns: 34px 1fr;
+    gap: 14px;
+  }
+  .belt-node {
+    width: 32px;
+    height: 32px;
+  }
+  .belt-card-head {
+    flex-wrap: wrap;
+  }
+}

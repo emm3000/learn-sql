@@ -18,6 +18,8 @@ export interface Belt {
   subtitle: string;
   /** Primary accent color as a hex value. */
   color: string;
+  /** AA-safe text variant of the accent for use on light backgrounds. */
+  ink: string;
   status: BeltStatus;
 }
 
@@ -31,6 +33,7 @@ export const belts: Belt[] = [
     name: 'Beginner',
     subtitle: 'Write SQL without fear',
     color: '#16a34a',
+    ink: '#15803d',
     status: 'active',
   },
   {
@@ -38,6 +41,7 @@ export const belts: Belt[] = [
     name: 'Intermediate',
     subtitle: 'Answer questions with data',
     color: '#2563eb',
+    ink: '#1d4ed8',
     status: 'active',
   },
   {
@@ -45,6 +49,7 @@ export const belts: Belt[] = [
     name: 'Advanced',
     subtitle: 'Design and give logic to the database',
     color: '#7c3aed',
+    ink: '#6d28d9',
     status: 'coming-soon',
   },
   {
@@ -52,6 +57,7 @@ export const belts: Belt[] = [
     name: 'Ninja',
     subtitle: 'Make it fly',
     color: '#dc2626',
+    ink: '#b91c1c',
     status: 'coming-soon',
   },
   {
@@ -59,6 +65,7 @@ export const belts: Belt[] = [
     name: 'Insane',
     subtitle: 'Run it in production',
     color: '#111827',
+    ink: '#111827',
     status: 'coming-soon',
   },
 ];

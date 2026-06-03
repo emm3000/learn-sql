@@ -4,173 +4,237 @@ import { belts } from '../lib/belts.ts';
 import { exercisesByLesson } from '../lib/exercises/index.ts';
 import BeltLessons from '../components/BeltLessons.svelte';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE_NAME } from '../lib/site.ts';
+import '../styles/belt-map.css';
 
 // Build a per-belt lesson lookup: group all non-draft lessons by belt,
 // sorted by per-belt order (each belt's order starts at 1 independently).
 const allLessons = await getCollection('lessons', ({ data }) => !data.draft);
-const lessonsByBelt = allLessons.reduce<Record<string, { slug: string; title: string; order: number; exerciseCount: number }[]>>(
-  (acc, entry) => {
-    const beltId = entry.data.belt;
-    if (!acc[beltId]) acc[beltId] = [];
-    acc[beltId].push({
-      slug: entry.id,
-      title: entry.data.title,
-      order: entry.data.order,
-      exerciseCount: exercisesByLesson[entry.id]?.length ?? 0,
-    });
-    return acc;
-  },
-  {},
-);
+const lessonsByBelt = allLessons.reduce<
+  Record<
+    string,
+    { slug: string; title: string; order: number; exerciseCount: number }[]
+  >
+>((acc, entry) => {
+  const beltId = entry.data.belt;
+  if (!acc[beltId]) acc[beltId] = [];
+  acc[beltId].push({
+    slug: entry.id,
+    title: entry.data.title,
+    order: entry.data.order,
+    exerciseCount: exercisesByLesson[entry.id]?.length ?? 0,
+  });
+  return acc;
+}, {});
+
 // Sort each belt's lessons by their per-belt order.
 for (const beltId of Object.keys(lessonsByBelt)) {
   lessonsByBelt[beltId].sort((a, b) => a.order - b.order);
 }
+
+// Compute total live lessons across all active belts (real count, not hardcoded).
+const totalLiveLessons = belts
+  .filter((b) => b.status === 'active')
+  .reduce((sum, b) => sum + (lessonsByBelt[b.id]?.length ?? 0), 0);
+
+// First lesson of the first active belt for the CTA button.
+const firstActiveBelt = belts.find((b) => b.status === 'active');
+const firstLesson = firstActiveBelt
+  ? (lessonsByBelt[firstActiveBelt.id]?.[0] ?? null)
+  : null;
 ---
 
 <BaseLayout
   title="Learn PostgreSQL in the browser"
   description="Learn PostgreSQL by writing real SQL — no setup, no account, runs in your browser."
 >
-    <header class="site-header">
-      <h1>{SITE_NAME}</h1>
-      <p class="site-tagline">
-        Learn PostgreSQL by writing real SQL — no setup, no account, runs in
-        your browser.
-      </p>
-    </header>
+  <header class="nav">
+    <a class="wm" href="/" aria-label="pgGym home">
+      <span class="dot" aria-hidden="true"></span><span class="wpg">pg</span
+      ><span class="wgym">Gym</span>
+    </a>
+    <div class="nav-right">
+      <span class="nav-note">
+        <svg
+          width="13"
+          height="13"
+          viewBox="0 0 16 16"
+          fill="none"
+          aria-hidden="true"
+        >
+          <rect
+            x="3"
+            y="7"
+            width="10"
+            height="6.5"
+            rx="1.5"
+            stroke="currentColor"
+            stroke-width="1.3"></rect>
+          <path
+            d="M5.3 7V5.2a2.7 2.7 0 0 1 5.4 0V7"
+            stroke="currentColor"
+            stroke-width="1.3"></path>
+        </svg>
+        No account · progress saved on this device
+      </span>
+    </div>
+  </header>
 
-    <main id="main-content" tabindex="-1">
-      <h2 class="path-heading">Your Learning Path</h2>
-      <ol class="belt-list">
+  <main id="main-content" tabindex="-1">
+    <section class="hero">
+      <div class="hero-in">
+        <span class="eyebrow fade-up">Learn PostgreSQL · in your browser</span>
+        <h1 class="hero-h fade-up" style="animation-delay: .04s">
+          Learn SQL by<br />actually writing it.
+        </h1>
+        <p class="hero-promise fade-up" style="animation-delay: .09s">
+          "If you didn't write the SQL, it didn't count."
+        </p>
+        <p class="hero-sub fade-up" style="animation-delay: .13s">
+          A real PostgreSQL engine runs right here — no install, no account, no
+          setup. Open a lesson, write a query, run it, and get instant feedback.
+          Five belts take you from your first <code>SELECT</code> to production.
+        </p>
+        <div class="hero-cta fade-up" style="animation-delay: .17s">
+          {
+            firstLesson && (
+              <a
+                href={`/lessons/${firstLesson.slug}`}
+                class="btn btn-primary lg"
+              >
+                Write your first query
+                <svg
+                  width="15"
+                  height="15"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.5 8h11M9.5 4l4 4-4 4"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </a>
+            )
+          }
+          <span class="hero-meta">{totalLiveLessons} lessons live · free</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="journey">
+      <div class="journey-head">
+        <span class="eyebrow">The belt journey</span>
+        <h2 class="journey-h">Five belts, one path</h2>
+        <p class="journey-sub">
+          Each belt is a level of mastery. Start at green — write SQL without
+          fear.
+        </p>
+      </div>
+
+      <ol class="belts">
         {
-          belts.map((belt) => (
-            <li
-              class={`belt-card ${belt.status === 'coming-soon' ? 'belt-card--coming-soon' : ''}`}
-              style={`--belt-color: ${belt.color};`}
-            >
-              <div class="belt-card-header">
-                <div class="belt-indicator" aria-hidden="true" />
-                <div class="belt-meta">
-                  <h3 class="belt-name">{belt.name}</h3>
-                  <p class="belt-subtitle">{belt.subtitle}</p>
+          belts.map((belt, i) => {
+            const isActive = belt.status === 'active';
+            const stateClass = isActive ? 'belt-active' : 'belt-locked';
+            return (
+              <li
+                class={`belt ${stateClass}`}
+                style={`--c: ${belt.color}; --cink: ${belt.ink}`}
+              >
+                <div class="belt-rail">
+                  <span class="belt-node">
+                    {isActive ? (
+                      <span class="node-i">{i + 1}</span>
+                    ) : (
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <rect
+                          x="3.5"
+                          y="7"
+                          width="9"
+                          height="6"
+                          rx="1.4"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                        />
+                        <path
+                          d="M5.5 7V5.4a2.5 2.5 0 0 1 5 0V7"
+                          stroke="currentColor"
+                          stroke-width="1.5"
+                        />
+                      </svg>
+                    )}
+                  </span>
+                  {i < belts.length - 1 && <span class="belt-line" />}
                 </div>
-                {belt.status === 'coming-soon' && (
-                  <span class="coming-soon-badge">Coming soon</span>
-                )}
-              </div>
 
-              {belt.status === 'active' && (
-                <div class="belt-lessons">
-                  <BeltLessons lessons={lessonsByBelt[belt.id] ?? []} client:load />
+                <div class="belt-card">
+                  <div class="belt-card-head">
+                    {/* BeltBand graphic */}
+                    <span
+                      class={`belt-band${!isActive ? ' dim' : ''}`}
+                      aria-hidden="true"
+                    >
+                      <span class="bb-strap left" />
+                      <span class="bb-strap right" />
+                      <span class="bb-knot" />
+                      <span class="bb-tail t1" />
+                      <span class="bb-tail t2" />
+                    </span>
+
+                    <div class="belt-titles">
+                      <div class="belt-name-row">
+                        <h3 class="belt-name">{belt.name}</h3>
+                        {isActive ? (
+                          <span class="chip chip-active">In progress</span>
+                        ) : (
+                          <span class="chip chip-soon">Coming soon</span>
+                        )}
+                      </div>
+                      <p class="belt-tagline">{belt.subtitle}</p>
+                    </div>
+                  </div>
+
+                  {isActive && (
+                    <BeltLessons
+                      lessons={lessonsByBelt[belt.id] ?? []}
+                      beltColor={belt.color}
+                      beltInk={belt.ink}
+                      client:load
+                    />
+                  )}
+
+                  {!isActive && (
+                    <p class="belt-foot">
+                      Lessons for this belt are being written. The belt map
+                      shows you exactly where the path leads.
+                    </p>
+                  )}
                 </div>
-              )}
-            </li>
-          ))
+              </li>
+            );
+          })
         }
       </ol>
-    </main>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span class="wm sm" aria-label="pgGym">
+      <span class="dot" aria-hidden="true"></span><span class="wpg">pg</span
+      ><span class="wgym">Gym</span>
+    </span>
+    <span class="foot-note"
+      >Built on a real PostgreSQL engine, compiled to run in your browser.</span
+    >
+  </footer>
 </BaseLayout>
-
-<style>
-  .site-header {
-    margin-bottom: 32px;
-    max-width: 720px;
-  }
-
-  h1 {
-    font-size: 28px;
-    font-weight: 800;
-    margin: 0 0 8px;
-    color: #111827;
-  }
-
-  .site-tagline {
-    margin: 0;
-    color: #6b7280;
-    font-size: 16px;
-    line-height: 1.5;
-  }
-
-  .path-heading {
-    font-size: 18px;
-    font-weight: 700;
-    color: #374151;
-    margin: 0 0 16px;
-  }
-
-  .belt-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 720px;
-  }
-
-  .belt-card {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-left: 4px solid var(--belt-color);
-    border-radius: 10px;
-    padding: 20px;
-  }
-
-  .belt-card--coming-soon {
-    opacity: 0.55;
-  }
-
-  .belt-card-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 14px;
-  }
-
-  .belt-indicator {
-    flex-shrink: 0;
-    width: 14px;
-    height: 14px;
-    border-radius: 50%;
-    background: var(--belt-color);
-    margin-top: 4px;
-  }
-
-  .belt-meta {
-    flex: 1;
-  }
-
-  .belt-name {
-    font-size: 17px;
-    font-weight: 700;
-    color: #111827;
-    margin: 0 0 3px;
-  }
-
-  .belt-subtitle {
-    margin: 0;
-    font-size: 14px;
-    color: #6b7280;
-    line-height: 1.4;
-  }
-
-  .coming-soon-badge {
-    flex-shrink: 0;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 3px 8px;
-    border-radius: 10px;
-    background: #f3f4f6;
-    color: #4b5563;
-    border: 1px solid #e5e7eb;
-  }
-
-  .belt-lessons {
-    margin-top: 16px;
-    border-top: 1px solid #f3f4f6;
-    padding-top: 14px;
-  }
-</style>

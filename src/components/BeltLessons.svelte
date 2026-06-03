@@ -17,13 +17,21 @@
 
   interface Props {
     lessons: LessonMeta[];
+    beltColor?: string;
+    beltInk?: string;
   }
 
-  const { lessons }: Props = $props();
+  const {
+    lessons,
+    beltColor = '#16a34a',
+    beltInk = '#15803d',
+  }: Props = $props();
 
   // Progress map keyed by lesson slug. Populated client-side in onMount.
   // Before mount, this is undefined so we avoid a layout flash.
-  let progressMap = $state<Record<string, LessonProgress> | undefined>(undefined);
+  let progressMap = $state<Record<string, LessonProgress> | undefined>(
+    undefined,
+  );
 
   onMount(() => {
     const map: Record<string, LessonProgress> = {};
@@ -32,110 +40,271 @@
     }
     progressMap = map;
   });
+
+  // First lesson not yet done — the "current" one.
+  const currentSlug = $derived(
+    progressMap !== undefined
+      ? (lessons.find((l) => !progressMap![l.slug]?.done)?.slug ?? null)
+      : null,
+  );
+
+  const doneCount = $derived(
+    progressMap !== undefined
+      ? lessons.filter((l) => progressMap![l.slug]?.done).length
+      : 0,
+  );
 </script>
 
-<ol class="lesson-list">
-  {#each lessons as lesson (lesson.slug)}
-    {@const progress = progressMap?.[lesson.slug]}
-    <li class="lesson-item" class:is-done={progress?.done}>
-      <a href={`/lessons/${lesson.slug}`} class="lesson-link">
-        <span class="lesson-order">{lesson.order}</span>
-        <span class="lesson-title">{lesson.title}</span>
-        {#if progress !== undefined}
-          <span
-            class="progress-badge"
-            class:badge-done={progress.done}
-            class:badge-started={!progress.done && progress.completed > 0}
-          >
-            {#if progress.done}
-              Complete ✓
-            {:else if progress.completed > 0}
-              {progress.completed}/{progress.total} exercises
+<div class="belt-lessons-root" style="--c: {beltColor}; --cink: {beltInk}">
+  {#if progressMap !== undefined}
+    <div class="belt-progress-bar">
+      <span class="bp-count"
+        >{doneCount}<span class="bp-of">/{lessons.length}</span></span
+      >
+      <span class="bp-label">lessons</span>
+    </div>
+  {/if}
+
+  <ul class="lessons">
+    {#each lessons as lesson (lesson.slug)}
+      {@const progress = progressMap?.[lesson.slug]}
+      {@const isDone = progress?.done ?? false}
+      {@const isCurrent =
+        progressMap !== undefined && lesson.slug === currentSlug}
+      <li>
+        <a
+          href={`/lessons/${lesson.slug}`}
+          class="lesson-row"
+          class:current={isCurrent}
+          class:done={isDone}
+        >
+          <span class="lr-state">
+            {#if isDone}
+              <span class="lr-check">
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M3.5 8.3l3 3L12.5 5"
+                    stroke="#fff"
+                    stroke-width="2.4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </span>
             {:else}
-              Not started
+              <span class="lr-num" class:on={isCurrent}>{lesson.order}</span>
             {/if}
           </span>
-        {/if}
-      </a>
-    </li>
-  {/each}
-</ol>
+
+          <span class="lr-main">
+            <span class="lr-title">{lesson.title}</span>
+            <span class="lr-dek"
+              >{lesson.exerciseCount === 1
+                ? '1 exercise'
+                : `${lesson.exerciseCount} exercises`}</span
+            >
+          </span>
+
+          <span class="lr-meta">
+            {#if progressMap !== undefined}
+              {#if isDone}
+                <span class="lr-go review">Complete</span>
+              {:else if isCurrent}
+                <span class="lr-go">
+                  Start
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="M3 8h9M8.5 4.5L12 8l-3.5 3.5"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </span>
+              {:else if progress && progress.completed > 0}
+                <span class="lr-min"
+                  >{progress.completed}/{progress.total}</span
+                >
+              {/if}
+            {/if}
+          </span>
+        </a>
+      </li>
+    {/each}
+  </ul>
+</div>
 
 <style>
-  .lesson-list {
+  .belt-lessons-root {
+    margin-top: 4px;
+  }
+
+  /* Belt-level progress count — top-right, shown only post-mount */
+  .belt-progress-bar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-bottom: 4px;
+  }
+  .bp-count {
+    font-family: var(--f-ui);
+    font-weight: 700;
+    font-size: 22px;
+    color: var(--cink);
+    letter-spacing: -0.02em;
+  }
+  .bp-of {
+    color: var(--ink-4);
+    font-weight: 500;
+  }
+  .bp-label {
+    font-family: var(--f-mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-top: 1px;
+  }
+
+  /* Lesson list */
+  .lessons {
     list-style: none;
-    margin: 12px 0 0;
+    margin: 20px 0 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 9px;
   }
 
-  .lesson-item {
-    border: 1px solid #d1fae5;
-    border-radius: 8px;
-    background: #f0fdf4;
-    transition: border-color 0.12s;
-  }
-
-  .lesson-item:hover {
-    border-color: #86efac;
-  }
-
-  .lesson-item.is-done {
-    border-color: #16a34a;
-    background: #dcfce7;
-  }
-
-  .lesson-link {
+  .lesson-row {
+    width: 100%;
+    text-align: left;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
+    gap: 16px;
+    padding: 15px 16px;
+    border-radius: var(--r);
+    border: 1px solid var(--line);
+    background: var(--surface);
+    box-shadow: var(--sh-1);
+    transition:
+      border-color 0.16s,
+      box-shadow 0.16s,
+      transform 0.08s,
+      background 0.16s;
     text-decoration: none;
     color: inherit;
   }
-
-  .lesson-order {
-    flex-shrink: 0;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: #16a34a;
-    color: #fff;
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .lesson-row:hover {
+    border-color: color-mix(in oklab, var(--c) 40%, var(--line));
+    box-shadow: var(--sh-2);
+    transform: translateY(-1px);
+  }
+  .lesson-row.current {
+    border-color: color-mix(in oklab, var(--c) 45%, white);
+    background: color-mix(in oklab, var(--c) 4%, white);
   }
 
-  .lesson-title {
-    flex: 1;
-    font-size: 15px;
-    font-weight: 500;
-    color: #111827;
-    line-height: 1.4;
+  .lr-state {
+    flex: none;
   }
-
-  .progress-badge {
-    flex-shrink: 0;
-    font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 12px;
-    background: #e5e7eb;
-    color: #374151;
-    white-space: nowrap;
-  }
-
-  .progress-badge.badge-done {
-    background: #bbf7d0;
-    color: #166534;
+  .lr-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    font-family: var(--f-mono);
+    font-size: 13px;
     font-weight: 600;
+    background: var(--bg-2);
+    color: var(--ink-3);
+    border: 1px solid var(--line);
+  }
+  .lr-num.on {
+    background: var(--c);
+    color: #fff;
+    border-color: var(--c);
+  }
+  .lr-check {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    display: grid;
+    place-items: center;
+    background: var(--c);
+    color: #fff;
   }
 
-  .progress-badge.badge-started {
-    background: #fef9c3;
-    color: #854d0e;
+  .lr-main {
+    flex: 1;
+    min-width: 0;
+  }
+  .lr-title {
+    display: block;
+    font-family: var(--f-ui);
+    font-weight: 600;
+    font-size: 15.5px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .lr-dek {
+    display: block;
+    font-family: var(--f-serif);
+    font-size: 14px;
+    color: var(--ink-3);
+    margin-top: 2px;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* stylelint-disable-next-line */
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  .lr-meta {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .lr-min {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--ink-4);
+  }
+  .lr-go {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--f-ui);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--cink);
+  }
+  .lr-go.review {
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+
+  @media (max-width: 620px) {
+    .lr-dek {
+      display: none;
+    }
   }
 </style>
