@@ -14,9 +14,15 @@ importers:
       '@codemirror/lang-sql':
         specifier: 6.10.0
         version: 6.10.0
+      '@codemirror/language':
+        specifier: 6.12.3
+        version: 6.12.3
       '@codemirror/state':
         specifier: 6.6.0
         version: 6.6.0
+      '@codemirror/view':
+        specifier: 6.43.0
+        version: 6.43.0
       '@electric-sql/pglite':
         specifier: 0.4.6
         version: 0.4.6
@@ -29,6 +35,9 @@ importers:
       '@fontsource-variable/newsreader':
         specifier: 5.2.10
         version: 5.2.10
+      '@lezer/highlight':
+        specifier: 1.2.3
+        version: 1.2.3
       astro:
         specifier: 6.4.2
         version: 6.4.2(rollup@4.61.0)(yaml@2.9.0)
